@@ -6,12 +6,12 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/03/13 16:02:05 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/03/13 16:02:19 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	**parse(char **args, char **envp)
-{
+{kubvd
 }
