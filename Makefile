@@ -7,7 +7,9 @@ SRC = main.c \
 		exec.c \
 		./utils/utils.c \
 		./utils/ft_split.c \
+		./utils/f.c \
 		parse.c \
+		error.c \
 
 OBJ = $(SRC:.c=.o)
 
