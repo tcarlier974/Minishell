@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 00:13:55 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/09 23:50:26 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:59:05 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,23 @@
 
 # define PROMPT "@minishell$ "
 
+typedef enum e_token_type {
+	INPUT,
+	HEREDOC,
+	TRUNC,
+	APPEND,
+	PIPE,
+	CMD,
+	ARG,
+} t_token_type;
+
 typedef struct s_token
 {
 	char			*str; // raw parsed (splited on ' ')
-	int				type; // token enum
-	int				pipe[2];
-	struct s_token	*prev;
-	struct s_token	*next;
+	t_token_type	type; // token enum
+	int				pipe[2]; //stdou qnd stdin // default 1 and 2 (fd) stderr = 3 (never change)
+	struct s_token	*prev; // null = first
+	struct s_token	*next; // null = last
 }				t_token;
 
 typedef struct s_data
@@ -53,12 +63,12 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_exec(char **args, char **envp);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strdup(const char *s);
-int ft_strstrlen(char **t);
+int 	ft_strstrlen(char **t);
 t_token *parse(char *args, char **envp);
 void	print_error(t_data *data, char *str, int code);
-void open_quote(char *args);
-int	is_space(char c);
-int get_number_segment(char *str);
-void extract_cmd(char *str);
+void	open_quote(char *args);
+int		is_space(char c);
+int 	get_number_segment(char *str);
+char 	**extract_cmd(char *str);
 char	*ft_strndup(char *s1, int len);
 #endif

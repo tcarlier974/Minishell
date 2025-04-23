@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/10 00:10:09 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:58:35 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,7 @@
 # define CMD		6	//"|"
 # define ARG		7	//"|"
 */
-enum nigger_enum_e {
-	INPUT,
-	HEREDOC,
-	TRUNC,
-	APPEND,
-	PIPE,
-	CMD,
-	ARG,
-};
+
 
 /*
 	[INPUT] = < fd in (sdtdin) = stdout of file (example: wc -l < /etc/passwd)
@@ -134,86 +126,75 @@ int length_until_spe(char *l, int i)
 
 // /bin/ls 'hellozzad zadad' "$(TEST_ENV) test" yes yes = 5
 // /bin/ls 'THIS IS A LONG ASS TEST PHRASE' = 2
+
+int	in_quote(char q, char *str, int e)
+{
+	e++;
+	while (str[e] != q)
+	{
+		e++;
+	}
+	return (e);
+}
+
 int get_number_segment(char *str)
 {
 	int	i;
 	int	s;
+	int q;
 
 	i = 0;
 	s = 0;
-	while(str[i] == ' ')
-	{
-		i++;
-	}
 	while (str[i])
 	{
-		if (str[i] == ' ')
-		{
-			while (str[i] == ' ')
-				i++;
+		while (str[i] == ' ')
+		{	
+			i++;
+			q = 0;
 		}
-		else if (str[i] == '\"')
+		while (str[i] != ' ' && str[i])
 		{
-			i += 2;
-			while (str[i-1] != '\"')
+			if (str[i] == '\'' || str[i] == '\"')
+				i += in_quote(str[i], str, i);
+			else
 				i++;
+			q = 1;
 		}
-		else if (str[i] == '\'')
-		{
-			i += 2;
-			while (str[i-1] != '\'')
-				i++;
-		}
-		s++;
-		i++;
+		if (q > 0)
+			s++;
 	}
 	return (s);
 }
 
-void extract_cmd(char *str)
+char **extract_cmd(char *str)
 {
 	int		s;
 	int		e;
 	int		k;
-	int		q;
+	char	**res;
 
 	k = 0;
 	s = 0;
-	q = 0;
+	res = (char **)malloc((get_number_segment(str) + 1) * sizeof(char*));
 	while (k < get_number_segment(str) && str[s])
 	{
 		while (str[s] == ' ' && str[s])
 			s++;
 		e = s;
-		if (str[s] != '\'' && str[s] != '\"')
+		while (str[e] != ' ' && str[e])
 		{
-			while (str[e] != ' ' && str[e])
+			if (str[e] == '\'' || str[e] == '\"')
+				e += in_quote(str[e], str, e);
+			else
 				e++;
-		}
-		else if (str[s] == '\'')
-		{
-			q = 1;
-			while ((str[e] != ' ' || q == 1) && str[e])
-			{
-				e++;
-				if (str[e] == '\'')
-					q = 0;
-			}
-		}
-		else if (str[s] == '\"')
-		{
-			q = 1;
-			while ((str[e] != ' ' || q == 1) && str[e])
-			{
-				e++;
-				if (str[e] == '\"')
-					q = 0;
-			}
 		}
 		printf("extracted %s\n", ft_strndup((char *)str + s, e - s));
+		res[k] = ft_strndup((char *)str + s, e - s);
 		k++;
 		s = e;
 	}
+	res[k] = NULL;
+	return (res);
 }
 
 t_token *parse(char *line, char **envp)
