@@ -21,6 +21,13 @@ t_token_type get_type(char *str)
 		return (ARG);
 }
 
+bool	is_cmd(t_token *tmp)
+{
+	if (tmp->prev == NULL || (tmp->prev->type == PIPE) || (tmp->prev->type == PV))
+		return (true);
+	return (false);
+}
+
 t_token *tab_to_lst(char *line, t_data *data) 
 {
 	int i;
@@ -28,7 +35,6 @@ t_token *tab_to_lst(char *line, t_data *data)
 	t_token	*tmp;
 	
 	head = data->token;
-	write(1, "ok", 2);
 	tmp = head;
 	i = 0;
 	char **str = malloc(sizeof(char *) * (get_number_segment(line) + 1));
@@ -36,8 +42,12 @@ t_token *tab_to_lst(char *line, t_data *data)
 	while (str[i] != NULL)
 	{
 		tmp->type = get_type(str[i]);
-		printf("%d\n", tmp->type);
 		tmp->str = str[i];
+		if (tmp->type == ARG)
+		{
+			if (is_cmd(tmp))
+				tmp->type = CMD;
+		}
 		tmp = tmp->next;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 20:57:28 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:55:30 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # define TRUNC		3	//">"
 # define APPEND		4	//">>"
 # define PIPE		5	//"|"
-# define CMD		6	//"|"
-# define ARG		7	//"|"
+# define CMD		6	
+# define ARG		7	
 */
 
 
@@ -87,30 +87,36 @@ t_token_type	is_ratiel(char *str)
 			return (TRUNC);
 		if (!ft_strncmp(str, "|", 1))
 			return (PIPE);
+		if (!ft_strncmp(str, ";", 1))
+			return (PV);
 	}
 	return (0);
 }
 
-// void open_quote(char *args)
-// {
-// 	int	i;
-// 	int	c1;
-// 	int	c2;
+bool open_quote(char *args)
+{
+	int	i;
+	int	c1;
+	int	c2;
 
-// 	i = 0;
-// 	c1 = 0;
-// 	c2 = 0;
-// 	while(args[i])
-// 	{
-// 		if (args[i] == '\'')
-// 			c1++;
-// 		else if (args[i] == '\"')
-// 			c2++;
-// 		i++;
-// 	}
-// 	//if (c1 % 2 != 0 || c2 % 2 != 0)
-// 		//print_error("open quote", 1);
-// }
+	i = 0;
+	c1 = 0;
+	c2 = 0;
+	while(args[i])
+	{
+		if (args[i] == '\'')
+			c1++;
+		else if (args[i] == '\"')
+			c2++;
+		i++;
+	}
+	if (c1 % 2 != 0 || c2 % 2 != 0)
+	{
+		write(2, "open quote\n", 11);
+		return (true);
+	}
+	return (false);
+}
 
 int length_until_spe(char *l, int i)
 {

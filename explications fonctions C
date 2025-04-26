@@ -71,3 +71,6 @@ Par défaut, si aucun processus n'écrit, la lecture sur pipefd[0] bloque. Il es
 
 Fermeture
 Chaque processus doit fermer le descripteur qu'il n'utilise pas pour éviter les blocages ou les fuites de ressources.
+
+
+

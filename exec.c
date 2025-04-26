@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:02:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 02:29:08 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:37:45 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_exec(char **args, char **envp)
 		if (execve(args[0], args, envp) < 0)
 		{
 			perror("minishell");
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else

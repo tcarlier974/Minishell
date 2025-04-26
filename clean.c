@@ -1,19 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 16:24:54 by igilbert          #+#    #+#             */
-/*   Updated: 2025/04/26 23:24:40 by tcarlier         ###   ########.fr       */
+/*   Created: 2025/04/26 23:05:43 by tcarlier          #+#    #+#             */
+/*   Updated: 2025/04/26 23:16:50 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "./includes/minishell.h"
 
-void	ft_exit(int status, t_data *data)
+void	clean_token(t_token *token)
 {
-	clean(data);
-	exit(EXIT_SUCCESS);
+	t_token	*tmp;
+	
+	tmp = token;
+	while (tmp->next)
+	{
+		token = token->next;
+		free(tmp);
+		tmp = token;
+	}
+}
+
+void	clean(t_data *data)
+{
+	clean_token(data->token);
+	free(data->pwd);
+	free(data);
 }

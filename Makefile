@@ -12,6 +12,7 @@ SRC = main.c \
 		error.c \
 		./parsing/parse_lst.c \
 		./parsing/init.c \
+		clean.c \
 
 
 OBJ = $(SRC:.c=.o)

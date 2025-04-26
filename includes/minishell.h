@@ -37,6 +37,7 @@ typedef enum e_token_type {
 	TRUNC,
 	APPEND,
 	PIPE,
+	PV,
 	CMD,
 	ARG,
 } t_token_type;
@@ -68,10 +69,11 @@ char	*ft_strdup(const char *s);
 int 	ft_strstrlen(char **t);
 t_token *parse(char *args, char **envp);
 void	print_error(t_data *data, char *str, int code);
-void	open_quote(char *args);
+bool	open_quote(char *args);
 int		is_space(char c);
 int 	get_number_segment(char *str);
 char 	**extract_cmd(char *str);
 char	*ft_strndup(char *s1, int len);
 t_token_type	is_ratiel(char *str);
+void	clean(t_data *data);
 #endif
