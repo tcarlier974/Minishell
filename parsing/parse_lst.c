@@ -23,7 +23,7 @@ t_token_type get_type(char *str)
 
 bool	is_cmd(t_token *tmp)
 {
-	if (tmp->prev == NULL || (tmp->prev->type == PIPE) || (tmp->prev->type == PV))
+	if (tmp->prev == NULL || (tmp->prev->type == PIPE))
 		return (true);
 	return (false);
 }

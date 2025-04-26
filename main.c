@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 00:16:46 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 23:41:35 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:12:03 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	main(int argc, char **argv, char **envp)
 			printf("%d\n",get_number_segment(line));
 			init(&data, line);
 			data->token = tab_to_lst(line, data);
+			
 			//[0] = '\'' [-1] = '\'' = cut and send
 			//[0] = '\"' [-1] = '\"' cut, replace env var calls and send
 		}

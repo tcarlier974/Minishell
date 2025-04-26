@@ -37,7 +37,6 @@ typedef enum e_token_type {
 	TRUNC,
 	APPEND,
 	PIPE,
-	PV,
 	CMD,
 	ARG,
 } t_token_type;

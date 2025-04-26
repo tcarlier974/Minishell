@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 23:55:30 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:15:02 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ t_token_type	is_ratiel(char *str)
 			return (TRUNC);
 		if (!ft_strncmp(str, "|", 1))
 			return (PIPE);
-		if (!ft_strncmp(str, ";", 1))
-			return (PV);
 	}
 	return (0);
 }
