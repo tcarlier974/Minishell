@@ -108,9 +108,8 @@ void open_quote(char *args)
 			c2++;
 		i++;
 	}
-	if (c1 % 2 != 0 || c2 % 2 != 0)
+	//if (c1 % 2 != 0 || c2 % 2 != 0)
 		//print_error("open quote", 1);
-		;
 }
 
 int length_until_spe(char *l, int i)
