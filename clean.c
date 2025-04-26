@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 23:05:43 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/27 00:45:50 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 01:41:38 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	clean_extract(char **str)
 	int i;
 	
 	i = 0;
-	while (str[i])
+	while (str[i] != NULL)
 	{
 		free(str[i]);
 		i++;
