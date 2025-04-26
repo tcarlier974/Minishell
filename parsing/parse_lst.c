@@ -51,5 +51,6 @@ t_token *tab_to_lst(char *line, t_data *data)
 		tmp = tmp->next;
 		i++;
 	}
+	clean_extract(str);
 	return (head);
 }

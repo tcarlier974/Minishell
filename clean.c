@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 23:05:43 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 23:16:50 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:19:13 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,19 @@ void	clean_token(t_token *token)
 		free(tmp);
 		tmp = token;
 	}
+}
+
+void	clean_extract(char **str)
+{
+	int i;
+	
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 }
 
 void	clean(t_data *data)
