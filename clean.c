@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 23:05:43 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/27 00:44:34 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:45:50 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	clean_token(t_token *token)
 	t_token	*tmp;
 	
 	tmp = token;
-	while (tmp->next->next)
+	while (tmp)
 	{
 		token = token->next;
 		free(tmp);
