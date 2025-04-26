@@ -57,7 +57,7 @@ typedef struct s_data
 	
 }				t_data;
 
-void	init(t_data *data, char *arg);
+void	init(t_data **data, char *arg);
 t_token	*tab_to_lst(char *line, t_data *data);
 char	**ft_split(char const *s1, char c);
 size_t	ft_strlen(const char *s);
