@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/27 01:43:28 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 01:47:09 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,31 +199,31 @@ char **extract_cmd(char *str)
 	return (res);
 }
 
-t_token *parse(char *line, char **envp)
-{
-	t_token *head = NULL;
-	int i = 0;
-	(void)envp;
-	while (line[i])
-	{
-		//while (is_space(line[i]))
-		//	i++;
-		if (line[i] && !is_ratiel(&line[i]))
-		{
-			int lus = length_until_spe(line, i);
-			if (lus != -1)
-			{
-				printf("%d, %s\n", lus, strndup(&line[i], lus));
-				line += lus;
-				continue;
-			}
-			printf("class: %c %d\n", line[i], length_until_spe(line, i));
-			i++;
-			continue;
-		}
-		printf("spe: %c %d\n", line[i], length_until_spe(line, i));
-		i++;
-	}
+// t_token *parse(char *line, char **envp)
+// {
+// 	t_token *head = NULL;
+// 	int i = 0;
+// 	(void)envp;
+// 	while (line[i])
+// 	{
+// 		//while (is_space(line[i]))
+// 		//	i++;
+// 		if (line[i] && !is_ratiel(&line[i]))
+// 		{
+// 			int lus = length_until_spe(line, i);
+// 			if (lus != -1)
+// 			{
+// 				printf("%d, %s\n", lus, strndup(&line[i], lus));
+// 				line += lus;
+// 				continue;
+// 			}
+// 			printf("class: %c %d\n", line[i], length_until_spe(line, i));
+// 			i++;
+// 			continue;
+// 		}
+// 		printf("spe: %c %d\n", line[i], length_until_spe(line, i));
+// 		i++;
+// 	}
 	
-	return head;
-}
+// 	return head;
+// }
