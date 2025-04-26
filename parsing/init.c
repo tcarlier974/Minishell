@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:21:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 21:06:11 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:13:31 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void init_t_token(t_token *token, char *arg)
 	token->type = 0;
 	token->prev = NULL;
 	token->next = NULL;
-	tmp = token->next;
 	tmp = malloc(sizeof(t_token));
+	token->next = tmp;
 	tmp->prev = token;
 	tmp2 = token;
 	while (i < get_number_segment(arg) - 1)
