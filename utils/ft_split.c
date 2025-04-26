@@ -6,11 +6,11 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:01:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/09 21:27:26 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:29:42 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 int	count_words(char *s, char c)
 {

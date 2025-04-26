@@ -6,11 +6,11 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:02:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/03/10 09:44:06 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:29:08 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "./includes/minishell.h"
 
 int	ft_exec(char **args, char **envp)
 {

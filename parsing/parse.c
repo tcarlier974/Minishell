@@ -6,11 +6,11 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/22 17:58:35 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:31:21 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 // token
 /*
@@ -70,7 +70,7 @@ static void	copy_token(char *command, int length, char *str, int i)
 	
 */
 
-int	is_ratiel(char *str)
+t_token_type	is_ratiel(char *str)
 {
 	if (str && *str && ft_strlen(str) >= 2)
 	{

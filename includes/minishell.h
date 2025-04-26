@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: jdupuis <jdupuis@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 00:13:55 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/22 17:59:05 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:2:177:46 by jdupuis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,13 @@ typedef struct s_token
 
 typedef struct s_data
 {
-	t_token	token;
+	t_token	*token;
 	char	*pwd;
 	
 }				t_data;
 
+void	init(t_data *data, char *arg);
+t_token	*tab_to_lst(char *line, t_data *data);
 char	**ft_split(char const *s1, char c);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -71,4 +73,5 @@ int		is_space(char c);
 int 	get_number_segment(char *str);
 char 	**extract_cmd(char *str);
 char	*ft_strndup(char *s1, int len);
+t_token_type	is_ratiel(char *str);
 #endif

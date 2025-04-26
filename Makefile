@@ -1,6 +1,6 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -lreadline
 
 SRC = main.c \
@@ -8,8 +8,11 @@ SRC = main.c \
 		./utils/utils.c \
 		./utils/ft_split.c \
 		./utils/f.c \
-		parse.c \
+		./parsing/parse.c \
 		error.c \
+		./parsing/parse_lst.c \
+		./parsing/init.c \
+
 
 OBJ = $(SRC:.c=.o)
 
@@ -28,6 +31,7 @@ fclean: clean
 re: fclean $(NAME)
 
 git:
+	make fclean
 	git add .
 	git commit -m "update"
 	git push

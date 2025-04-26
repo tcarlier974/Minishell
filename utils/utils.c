@@ -6,11 +6,11 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 08:54:01 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/03/10 10:05:13 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:29:31 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 size_t	ft_strlen(const char *s)
 {

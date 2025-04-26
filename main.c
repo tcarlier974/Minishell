@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: jdupuis <jdupuis@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 00:16:46 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/22 17:27:12 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:17:005 by jdupuis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "./includes/minishell.h"
 
 //https://github.com/Hqndler/42-minishell/tree/main
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
+	t_data	*data = NULL;
 	//char	**args;
 	int		status;
 	(void)argc;
@@ -32,9 +33,11 @@ int	main(int argc, char **argv, char **envp)
 		if (*line)
 		{
 			add_history(line);
-			open_quote(line);
 			printf("%d\n",get_number_segment(line));
-			extract_cmd(line);
+			init(data, line);
+			printf("ok");
+			data->token = tab_to_lst(line, data);
+			return (0);
 			//[0] = '\'' [-1] = '\'' = cut and send
 			//[0] = '\"' [-1] = '\"' cut, replace env var calls and send
 		}

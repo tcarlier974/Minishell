@@ -3,31 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   parse_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: jdupuis <jdupuis@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:56:34 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/23 23:07:57 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:05:115 by jdupuis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 t_token_type get_type(char *str)
 {
 	// < >> > >> | || CMD ARG
-	
+	if (is_ratiel(str) != 0)
+		return (is_ratiel(str));
+	else
+		return (ARG);
 }
 
-t_token *tab_to_lst(char *line) 
+t_token *tab_to_lst(char *line, t_data *data) 
 {
-	t_token *HEAD = NULL;
-	t_token *prev = NULL;
-	int i = 0;
+	int i;
+	t_token	*head;
+	t_token	*tmp;
+	
+	head = data->token;
+	tmp = head;
+	i = 0;
 	char **str = extract_cmd(line);
 	while (str[i] != NULL)
 	{
-		t_token *tmp = (t_token*)malloc(sizeof(t_token*));
 		tmp->type = get_type(str[i]);
+		printf("%d\n", tmp->type);
+		tmp->str = str[i];
+		tmp = tmp->next;
+		i++;
 	}
-	return (NULL);
+	return (head);
 }
