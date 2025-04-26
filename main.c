@@ -37,11 +37,6 @@ int	main(int argc, char **argv, char **envp)
 			init(&data, line);
 			write(1, "ok", 2);
 			data->token = tab_to_lst(line, data);
-			while(data->token->next != NULL)
-			{
-				printf("%s", data->token->str);
-				data->token = data->token->next;
-			}
 			//[0] = '\'' [-1] = '\'' = cut and send
 			//[0] = '\"' [-1] = '\"' cut, replace env var calls and send
 		}
