@@ -17,7 +17,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
-	t_data	*data = NULL;
+	t_data	data;
 	//char	**args;
 	int		status;
 	(void)argc;
@@ -34,9 +34,9 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			printf("%d\n",get_number_segment(line));
-			init(data, line);
+			init(&data, line);
 			write(1, "ok", 2);
-			data->token = tab_to_lst(line, data);
+			data.token = tab_to_lst(line, &data);
 			return (0);
 			//[0] = '\'' [-1] = '\'' = cut and send
 			//[0] = '\"' [-1] = '\"' cut, replace env var calls and send
