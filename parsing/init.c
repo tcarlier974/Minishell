@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:21:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 22:08:54 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:30:51 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void init_t_token(t_token *token, char *arg)
 	token->next = tmp;
 	tmp->prev = token;
 	tmp2 = token;
-	while (i < get_number_segment(arg) - 1)
+	while (i < get_number_segment(arg) - 2)
 	{
 		tmp->str = NULL;
 		tmp->type = -1;
