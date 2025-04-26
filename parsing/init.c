@@ -35,6 +35,7 @@ void init_t_token(t_token *token, char *arg)
 		tmp->next = malloc(sizeof(t_token));
 		tmp2 = tmp;
 		tmp = tmp->next;
+		tmp->next = NULL;
 		i++;
 	}
 	tmp->next = NULL;
@@ -45,5 +46,6 @@ void init(t_data *data, char *arg)
 	data = malloc(sizeof(t_data));
 	getcwd(data->pwd, PATH_MAX);
 	data->token = malloc(sizeof(t_token));
+	data->token->next = NULL;
 	init_t_token(data->token, arg);
 }
