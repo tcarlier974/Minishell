@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 03:00:00 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:57:28 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,26 +91,26 @@ t_token_type	is_ratiel(char *str)
 	return (0);
 }
 
-void open_quote(char *args)
-{
-	int	i;
-	int	c1;
-	int	c2;
+// void open_quote(char *args)
+// {
+// 	int	i;
+// 	int	c1;
+// 	int	c2;
 
-	i = 0;
-	c1 = 0;
-	c2 = 0;
-	while(args[i])
-	{
-		if (args[i] == '\'')
-			c1++;
-		else if (args[i] == '\"')
-			c2++;
-		i++;
-	}
-	//if (c1 % 2 != 0 || c2 % 2 != 0)
-		//print_error("open quote", 1);
-}
+// 	i = 0;
+// 	c1 = 0;
+// 	c2 = 0;
+// 	while(args[i])
+// 	{
+// 		if (args[i] == '\'')
+// 			c1++;
+// 		else if (args[i] == '\"')
+// 			c2++;
+// 		i++;
+// 	}
+// 	//if (c1 % 2 != 0 || c2 % 2 != 0)
+// 		//print_error("open quote", 1);
+// }
 
 int length_until_spe(char *l, int i)
 {

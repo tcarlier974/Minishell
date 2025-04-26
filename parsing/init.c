@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:21:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 02:39:40 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:56:03 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void init_t_token(t_token *token, char *arg)
 	{
 		tmp->str = NULL;
 		tmp->type = 0;
+		tmp->next = NULL;
 		if (i != 0)
 			tmp->prev = tmp2;
 		tmp->next = malloc(sizeof(t_token));
 		tmp2 = tmp;
 		tmp = tmp->next;
-		tmp->next = NULL;
 		i++;
 	}
 	tmp->next = NULL;
