@@ -75,5 +75,5 @@ char 	**extract_cmd(char *str);
 char	*ft_strndup(char *s1, int len);
 t_token_type	is_ratiel(char *str);
 void	clean(t_data **data);
-void	clean_extract(char **str);
+void	clean_extract(char ***str);
 #endif
