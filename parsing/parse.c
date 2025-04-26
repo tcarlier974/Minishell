@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/27 00:15:02 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/27 01:43:28 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,6 @@ char **extract_cmd(char *str)
 			else
 				e++;
 		}
-		printf("extracted %s\n", ft_strndup((char *)str + s, e - s));
 		res[k] = ft_strndup((char *)str + s, e - s);
 		k++;
 		s = e;
