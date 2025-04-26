@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 			printf("%d\n",get_number_segment(line));
 			init(data, line);
-			printf("ok");
+			write(1, "ok", 2);
 			data->token = tab_to_lst(line, data);
 			return (0);
 			//[0] = '\'' [-1] = '\'' = cut and send

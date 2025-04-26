@@ -28,9 +28,11 @@ t_token *tab_to_lst(char *line, t_data *data)
 	t_token	*tmp;
 	
 	head = data->token;
+	write(1, "ok", 2);
 	tmp = head;
 	i = 0;
-	char **str = extract_cmd(line);
+	char **str = malloc(sizeof(char *) * (get_number_segment(line) + 1));
+	str = extract_cmd(line);
 	while (str[i] != NULL)
 	{
 		tmp->type = get_type(str[i]);
