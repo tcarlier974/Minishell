@@ -62,7 +62,7 @@ void init(t_data **data, char *arg)
 
 // <<
 // cat arg << eof -> cat arg -> pipe[0] = NULL
-// cat << eof -> cat << -> pipe[0] = NULL (res de la fonction qu'on crée pour <<) ?? pas sur, stdin surement, a confirmer
+// cat << eof -> cat << -> pipe[0] = NULL   les heredoc sont replacer avant d'executer la function, chaque heredoc sont appeller avant le flow de l'exec (de la droite vert la gauche)
 // cat arg1 << eof arg2 -> cat arg1 ; cat arg2
 
 // < 
