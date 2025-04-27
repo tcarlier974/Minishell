@@ -76,4 +76,5 @@ char	*ft_strndup(char *s1, int len);
 t_token_type	is_ratiel(char *str);
 void	clean(t_data **data);
 void	clean_extract(char **str);
+t_token	*init_redirect(t_data *data);
 #endif
