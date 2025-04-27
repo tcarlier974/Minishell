@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:21:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/27 02:49:49 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/28 00:21:39 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,3 @@ void init(t_data **data, char *arg)
 // cat fichier | wc -l -> print nb de ligne -> (cat) pipe[0] = fd_fichier pipe[1] = stdin de wc; (wc) pipe[0] = stdin pipe[1] = sortie standard
 // cas special : cmd arg | echo -> print '\n' -> (cmd) pipe[0] = arg pipe[1] = stdin de echo; (echo) pas de stdin juste un arg obligé
 
-t_token	*init_redirect(t_data *data)
-{
-	
-}

@@ -6,11 +6,24 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:02:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 23:37:45 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/28 00:52:16 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
+
+// > >> < << | cmd arg
+
+void	ft_setup_exec(t_data *data, char **envp)
+{
+	(void)envp;
+	t_token *head = data->token;
+	while (head)
+	{
+		printf("%s @@ %d @@ %d %d\n", head->str, head->type, head->pipe[0], head->pipe[1]);
+		head = head->next;
+	}
+}
 
 int	ft_exec(char **args, char **envp)
 {
@@ -24,8 +37,16 @@ int	ft_exec(char **args, char **envp)
 		perror("minishell");
 		return (1);
 	}
+	// close(pipe[0]);
+	// dup2(pipe[1], STDOUT_FILENO);
+	// close(pipe[1]);
 	if (pid == 0)
 	{
+		// if (is_builtin(args[0]) < 0)
+		// {
+		// 	perror("minishell");
+		// 	exit(EXIT_FAILURE);
+		// }
 		if (execve(args[0], args, envp) < 0)
 		{
 			perror("minishell");
@@ -34,5 +55,5 @@ int	ft_exec(char **args, char **envp)
 	}
 	else
 		waitpid(pid, &status, 0);
-	return (status);
+	return (0);
 }

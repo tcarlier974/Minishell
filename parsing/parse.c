@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/27 01:47:09 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/28 00:51:51 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,16 @@ int length_until_spe(char *l, int i)
 
 int	in_quote(char q, char *str, int e)
 {
+	int	i;
+
+	i = 0;
 	e++;
 	while (str[e] != q)
 	{
 		e++;
+		i++;
 	}
-	return (e);
+	return (i);
 }
 
 int get_number_segment(char *str)
@@ -187,9 +191,12 @@ char **extract_cmd(char *str)
 		while (str[e] != ' ' && str[e])
 		{
 			if (str[e] == '\'' || str[e] == '\"')
+			{	
 				e += in_quote(str[e], str, e);
-			else
-				e++;
+				printf("%d\n", e);
+				break ;
+			}
+			e++;
 		}
 		res[k] = ft_strndup((char *)str + s, e - s);
 		k++;
