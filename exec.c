@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:02:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/28 00:52:16 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/28 01:05:54 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_setup_exec(t_data *data, char **envp)
 {
 	(void)envp;
 	t_token *head = data->token;
-	while (head)
+	while (head->next)
 	{
 		printf("%s @@ %d @@ %d %d\n", head->str, head->type, head->pipe[0], head->pipe[1]);
 		head = head->next;

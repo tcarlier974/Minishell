@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/28 00:51:51 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/04/28 02:25:26 by samberna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,27 @@ int	in_quote(char q, char *str, int e)
 {
 	int	i;
 
-	i = 0;
+	i = 2;
 	e++;
-	while (str[e] != q)
+	while (str[e] != q && str[e])
 	{
 		e++;
 		i++;
 	}
 	return (i);
+}
+
+int	is_sep(char *str, int e)
+{
+	if (str[e] && (str[e] == '|' || str[e] == '>' || str[e] == '<'))
+	{
+		if ((str[e] == '>' && str[e + 1] == '>')
+			|| (str[e] == '<' && str[e + 1] == '<'))
+			return (2);
+	}	
+	if (str[e] && (str[e] == '|' || str[e] == '>' || str[e] == '<'))
+		return (1);
+	return (0);
 }
 
 int get_number_segment(char *str)
@@ -159,7 +172,7 @@ int get_number_segment(char *str)
 			i++;
 			q = 0;
 		}
-		while (str[i] != ' ' && str[i])
+		while (str[i] != ' ' && is_sep(str, i) == 0 && str[i])
 		{
 			if (str[i] == '\'' || str[i] == '\"')
 				i += in_quote(str[i], str, i);
@@ -167,8 +180,13 @@ int get_number_segment(char *str)
 				i++;
 			q = 1;
 		}
-		if (q > 0)
+		if (q > 0)	
 			s++;
+		if (is_sep(str, i) > 0)
+		{
+			s++;
+			i += is_sep(str, i);
+		}
 	}
 	return (s);
 }
@@ -188,18 +206,26 @@ char **extract_cmd(char *str)
 		while (str[s] == ' ' && str[s])
 			s++;
 		e = s;
-		while (str[e] != ' ' && str[e])
+
+		// echo "asd"||adad "ecw"
+
+
+		while ((str[e] != ' ' && is_sep(str, e) == 0) && str[e])
 		{
-			if (str[e] == '\'' || str[e] == '\"')
-			{	
+			if (str[e] == '\'' || str[e] == '\"')	
 				e += in_quote(str[e], str, e);
-				printf("%d\n", e);
-				break ;
-			}
-			e++;
+			else
+				e++;
 		}
 		res[k] = ft_strndup((char *)str + s, e - s);
 		k++;
+		if ((str[e - 1] && str[e - 1] != ' ') && is_sep(str, e) > 0)
+		{
+			s = e;
+			res[k] = ft_strndup((char *)str + s, is_sep(str, e));
+			e += is_sep(str, e);
+			k++;
+		}
 		s = e;
 	}
 	res[k] = NULL;
