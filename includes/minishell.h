@@ -77,4 +77,5 @@ t_token_type	is_ratiel(char *str);
 void	clean(t_data **data);
 void	clean_extract(char **str);
 void	ft_setup_exec(t_data *data, char **envp);
+int		ft_strcmp(const char *s1, const char *s2);
 #endif

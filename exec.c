@@ -3,16 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:02:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/28 01:05:54 by samberna         ###   ########.fr       */
+/*   Updated: 2025/05/02 19:22:42 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
 // > >> < << | cmd arg
+
+t_token	*recup_heredoc(t_data *data)
+{
+	t_token	*head;
+	char	*line;
+	
+	head = data->token;
+	while (head->next)
+	{
+		if (head->type == HEREDOC)
+		{
+			line = readline("heredoc> ");
+			while (ft_strcmp(line, head->next->str))
+			{
+				write(head->pipe[1], line, ft_strlen(line));
+				write(head->pipe[1], "\n", 1);
+				free(line);
+				line = readline("heredoc> ");
+			}
+			free(line);
+		}
+		head = head->next;
+	}
+	return (data->token);
+}
 
 void	ft_setup_exec(t_data *data, char **envp)
 {
@@ -23,6 +48,8 @@ void	ft_setup_exec(t_data *data, char **envp)
 		printf("%s @@ %d @@ %d %d\n", head->str, head->type, head->pipe[0], head->pipe[1]);
 		head = head->next;
 	}
+	data->token = recup_heredoc(data);
+	ft_exec(data->token->str, envp);
 }
 
 int	ft_exec(char **args, char **envp)
