@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 09:56:33 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/28 02:25:26 by samberna         ###   ########.fr       */
+/*   Updated: 2025/05/02 18:06:45 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,10 +206,6 @@ char **extract_cmd(char *str)
 		while (str[s] == ' ' && str[s])
 			s++;
 		e = s;
-
-		// echo "asd"||adad "ecw"
-
-
 		while ((str[e] != ' ' && is_sep(str, e) == 0) && str[e])
 		{
 			if (str[e] == '\'' || str[e] == '\"')	
@@ -217,6 +213,8 @@ char **extract_cmd(char *str)
 			else
 				e++;
 		}
+		if (e == s)
+			e+=is_sep(str, e);
 		res[k] = ft_strndup((char *)str + s, e - s);
 		k++;
 		if ((str[e - 1] && str[e - 1] != ' ') && is_sep(str, e) > 0)
