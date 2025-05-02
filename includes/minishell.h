@@ -41,6 +41,13 @@ typedef enum e_token_type {
 	ARG,
 } t_token_type;
 
+typedef struct s_queue
+{
+	char	*cmd;
+	char	*args;
+	t_queue	*next;
+}				t_queue;
+
 typedef struct s_token
 {
 	char			*str; // raw parsed (splited on ' ')
@@ -54,6 +61,7 @@ typedef struct s_data
 {
 	t_token	*token;
 	char	*pwd;
+	t_queue	*q;
 	
 }				t_data;
 
