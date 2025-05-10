@@ -32,11 +32,11 @@
 # define PROMPT "@minishell$ "
 
 typedef enum e_token_type {
-	INPUT,
-	HEREDOC,
-	TRUNC,
-	APPEND,
-	PIPE,
+	INPUT, // <
+	HEREDOC, // <<
+	TRUNC, // >
+	APPEND, // >>
+	PIPE, // |
 	CMD,
 	ARG,
 } t_token_type;
@@ -45,7 +45,7 @@ typedef struct s_queue
 {
 	char	*cmd;
 	char	*args;
-	t_queue	*next;
+	struct s_queue	*next;
 }				t_queue;
 
 typedef struct s_token
@@ -61,6 +61,7 @@ typedef struct s_data
 {
 	t_token	*token;
 	char	*pwd;
+	t_queue	*queue;
 	t_queue	*q;
 	
 }				t_data;
@@ -86,4 +87,7 @@ void	clean(t_data **data);
 void	clean_extract(char **str);
 void	ft_setup_exec(t_data *data, char **envp);
 int		ft_strcmp(const char *s1, const char *s2);
+void compress_token(t_data *data);
+
+char	*ft_strchr(const char *s, int c);
 #endif

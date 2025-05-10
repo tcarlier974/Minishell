@@ -45,11 +45,10 @@ void	ft_setup_exec(t_data *data, char **envp)
 	t_token *head = data->token;
 	while (head->next)
 	{
-		printf("%s @@ %d @@ %d %d\n", head->str, head->type, head->pipe[0], head->pipe[1]);
-		head = head->next;
+		printf("%s@@\n", head->str);
+		if (head->next != NULL)
+			head = head->next;
 	}
-	data->token = recup_heredoc(data);
-	ft_exec(data->token->str, envp);
 }
 
 int	ft_exec(char **args, char **envp)

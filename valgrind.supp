@@ -1,0 +1,6 @@
+{
+   minishell/readline
+   Memcheck:Leak
+   ...
+   fun:readline
+}

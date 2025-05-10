@@ -14,6 +14,8 @@
 
 //https://github.com/Hqndler/42-minishell/tree/main
 
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -38,9 +40,12 @@ int	main(int argc, char **argv, char **envp)
 			//printf("%d\n",get_number_segment(line));
 			init(&data, line);
 			data->token = tab_to_lst(line, data);
+			//data->queue = init_queue(data->queue, data);
+			//data->queue = token_to_queue(data->token, data->queue);
+			compress_token(data);
 			ft_setup_exec(data, envp);
 			//[0] = '\'' [-1] = '\'' = cut and send
-			//[0] = '\"' [-1] = '\"' cut, replace env var calls and send
+			//[0] = '"' [-1] = '"' cut, replace env var calls and send
 		}
 		free(line);
 	}

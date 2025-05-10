@@ -42,7 +42,7 @@ t_token *tab_to_lst(char *line, t_data *data)
 	while (str[i] != NULL)
 	{
 		tmp->type = get_type(str[i]);
-		tmp->str = strdup(str[i]);
+		tmp->str = ft_strdup(str[i]);
 		if (tmp->type == ARG)
 		{
 			if (is_cmd(tmp))

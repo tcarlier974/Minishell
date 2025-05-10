@@ -53,10 +53,9 @@ void init(t_data **data, char *arg)
     (*data)->token = malloc(sizeof(t_token));
     if (!(*data)->token)
     {
-        free((*data)->pwd);
+        free((*data)->token);
         return;
     }
-    
     init_t_token((*data)->token, arg);
 }
 

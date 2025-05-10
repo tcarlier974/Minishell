@@ -13,12 +13,16 @@ SRC = main.c \
 		./parsing/parse_lst.c \
 		./parsing/init.c \
 		clean.c \
+		queue.c
 
 
 OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(NAME)
+
+address: $(OBJ)
+	$(CC) $(OBJ) $(LDFLAGS) -fsanitize=address -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
