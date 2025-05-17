@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdupuis <jdupuis@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/07 00:13:55 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/04/26 02:2:177:46 by jdupuis          ###   ########.fr       */
+/*   Created: 2025/05/12 01:59:24 by jdupuis           #+#    #+#             */
+/*   Updated: 2025/05/12 01:59:24 by jdupuis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,80 +14,181 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-# include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
-# include <errno.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
+# include <unistd.h>
 # include <fcntl.h>
-# include <stdbool.h>
-# include <dirent.h>
+# include <errno.h>
+# include <sys/wait.h>
 # include <sys/stat.h>
-# include <limits.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdbool.h>
+# include <ctype.h>
+# include "libft.h"
+# include <stdarg.h>
 
-# define PROMPT "@minishell$ "
+# define PROMPT "minishell> "
+# define MAX_PATH 4096
 
-typedef enum e_token_type {
-	INPUT, // <
-	HEREDOC, // <<
-	TRUNC, // >
-	APPEND, // >>
-	PIPE, // |
-	CMD,
-	ARG,
-} t_token_type;
+# define NO_QUOTE 0
+# define SINGLE_QUOTE 1
+# define DOUBLE_QUOTE 2
 
-typedef struct s_queue
+typedef enum e_token_type
 {
-	char	*cmd;
-	char	*args;
-	struct s_queue	*next;
-}				t_queue;
+	T_WORD = 0,
+	T_PIPE,
+	T_REDIR_IN,
+	T_REDIR_OUT,
+	T_APPEND,
+	T_HEREDOC
+}	t_token_type;
 
 typedef struct s_token
 {
-	char			*str; // raw parsed (splited on ' ')
-	t_token_type	type; // token enum
-	int				pipe[2]; //stdou qnd stdin // default 1 and 2 (fd) stderr = 3 (never change)
-	struct s_token	*prev; // null = first
-	struct s_token	*next; // null = last
-}				t_token;
+	char			*value;
+	t_token_type	type;
+	struct s_token	*next;
+}	t_token;
 
-typedef struct s_data
+typedef struct s_cmd
 {
-	t_token	*token;
-	char	*pwd;
-	t_queue	*queue;
-	t_queue	*q;
-	
-}				t_data;
+	char			**args;
+	int				fd_in;
+	int				fd_out;
+	pid_t			pid;
+	struct s_cmd	*next;
+}	t_cmd;
 
-void	init(t_data **data, char *arg);
-t_token	*tab_to_lst(char *line, t_data *data);
-char	**ft_split(char const *s1, char c);
+typedef struct s_minishell
+{
+	char		**env;
+	int			exit_status;
+	t_cmd		*cmd;
+	t_token		*tokens;
+}	t_minishell;
+
+void	init_shell(t_minishell *shell, char **env);
+void	cleanup(t_minishell *shell);
+void	shell_loop(t_minishell *shell);
+void	handle_sigint(int sig);
+void	handle_sigquit(int sig);
+int		has_balanced_quotes(char *input);
+int		length_within_quote(char quote_char, char *str, int pos);
+void	handle_quotes(char *input, int *i, int *in_quote);
+void	handle_redir_token(t_token **tokens, char *input, t_token_type type);
+
+t_token	*lexer(t_minishell *shell, char *input);
+t_cmd	*parse(t_minishell *shell, t_token *token);
+char	*process_filename(char *filename);
+t_token	*create_token(char *value, t_token_type type);
+void	token_add_back(t_token **tokens, t_token *new);
+int		is_whitespace(char c);
+int		is_metachar(char c);
+void	expand_variables(t_minishell *shell, t_token *token);
+char	*expand_word_with_quotes(t_minishell *shell, char *word);
+char	*handle_dollar_sign(t_minishell *shell, char *str, int *i);
+char	*handle_exit_status(t_minishell *shell, char *result);
+char	*handle_env_var(t_minishell *shell, char *str, int *i, char *result);
+
+void	process_cmd_args(t_cmd *cmd);
+void	process_echo_args(t_cmd *cmd);
+char	*strip_surrounding_quotes(const char *str);
+void	execute(t_minishell *shell, t_cmd *cmd);
+pid_t	launch_process(t_minishell *shell, t_cmd *cmd);
+void	execute_builtin(t_minishell *shell, t_cmd *cmd);
+int		is_builtin(char *cmd);
+int		count_args(char **args);
+int		execute_file(t_minishell *shell, char *file_path, char **args);
+
+int		ft_echo(t_cmd *cmd);
+int		ft_cd(t_minishell *shell, t_cmd *cmd);
+int		ft_pwd(void);
+int		ft_export(t_minishell *shell, t_cmd *cmd);
+int		ft_unset(t_minishell *shell, t_cmd *cmd);
+int		ft_env(t_minishell *shell);
+int		ft_exit(t_minishell *shell, t_cmd *cmd);
+
+char	**copy_env(char **env);
+char	*get_env_var(t_minishell *shell, char *var);
+int		set_env_var(t_minishell *shell, char *var, char *value);
+int		unset_env_var(t_minishell *shell, char *var);
+void	print_env(t_minishell *shell);
+int		is_valid_env_name(char *name);
+
+void	free_array(char **arr);
+void	free_env(char **env);
+void	free_tokens(t_token *tokens);
+void	free_cmds(t_cmd *cmd);
+char	*join_strs(char *s1, char *s2);
+void	print_error(char *cmd, char *arg, char *error);
+char	*ft_strndup(const char *s, size_t n);
+
+/* Libft-like utils */
 size_t	ft_strlen(const char *s);
-char	*ft_strjoin(char const *s1, char const *s2);
-int		ft_exec(char **args, char **envp);
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strdup(const char *s);
-int 	ft_strstrlen(char **t);
-t_token *parse(char *args, char **envp);
-void	print_error(t_data *data, char *str, int code);
-bool	open_quote(char *args);
-int		is_space(char c);
-int 	get_number_segment(char *str);
-char 	**extract_cmd(char *str);
-char	*ft_strndup(char *s1, int len);
-t_token_type	is_ratiel(char *str);
-void	clean(t_data **data);
-void	clean_extract(char **str);
-void	ft_setup_exec(t_data *data, char **envp);
-int		ft_strcmp(const char *s1, const char *s2);
-void compress_token(t_data *data);
-
 char	*ft_strchr(const char *s, int c);
+int		ft_isalpha(int c);
+int		ft_isalnum(int c);
+int		ft_isdigit(int c);
+long	ft_atol(const char *str);
+int		ft_sprintf(char *str, const char *fmt, ...);
+
+//parse
+void	__check_quotes(char c, int *in_single_quote, int *in_double_quote);
+int		__is_entirely_in_single_quotes(char *str);
+void	expand_variables(t_minishell *shell, t_token *token);
+char	*__append_char(char *result, char c);
+char	*__handle_quotes(char *result, char c, int *quote_flag);
+char	*__handle_dollar(t_minishell *shell, char *result, char *word, int *i);
+char	*expand_word_with_quotes(t_minishell *shell, char *word);
+char	*handle_dollar_sign(t_minishell *shell, char *str, int *i);
+char	*handle_exit_status(t_minishell *shell, char *result);
+char	*__append_dollar(char *result);
+char	*__append_env_value(char *result, char *value);
+void	__extract_var_name(char *str, int *i, char *var_name);
+char	*handle_env_var(t_minishell *shell, char *str, int *i, char *result);
+void	__process_quotes(char c, int *in_single_quote, int *in_double_quote);
+void	__copy_char(char *processed, char c, int *write_pos);
+char	*process_concat_filename(char *filename);
+t_cmd	*__create_new_cmd(t_cmd *cmd_list, t_cmd **current);
+char	**__add_argument(char **args, char *value, t_cmd *cmd_list);
+int		__handle_redirection(t_minishell *shell, t_cmd *current, t_token_type redir_type, char *fl);
+int		__process_redirection(t_minishell *shell, t_cmd *current, t_token **token, t_cmd *cmd_list, int *redir_error);
+t_cmd	*parse(t_minishell *shell, t_token *token);
+int		__is_quote(char c, int in_single_quote, int in_double_quote);
+int		__process_concat_loop(char *filename, char *processed, int len);
+void	__process_token(t_minishell *shell, t_cmd *current, t_token **token, t_cmd *cmd_list, int *redir_error);
+t_cmd	*__handle_pipe_and_create_cmd(t_minishell *shell, t_cmd **cmd_list, t_cmd **current, t_token **token);
+
+//main
+void	__handle_redirection_main(t_token **tokens, char *input, int *i);
+void	__handle_quotes_main(char *input, int *i, int *in_quote);
+void	__process_token_main(t_token **t, char *input, int *i, int *in_quote);
+t_token	*lexer(t_minishell *shell, char *input);
+char	*__process_quotes_main2(char *filename, int *read_pos, int *in_single, int *in_double);
+char	*get_redir_value(char *input, t_token_type type);
+int		__is_whitespace_no_quote(char c, int in_quote);
+int		__is_pipe_no_quote(char c, int in_quote);
+void	__handle_quote_state(char c, int *in_single, int *in_double);
+void	__free_and_replace_input(char **input, char *remaining_cmd);
+
+//exectution
+void	__redir_fd(int fd, int std);
+void	__close_other_fds(t_cmd *cmd);
+void	__exec_path_cmd(t_minishell *shell, t_cmd *cmd);
+void	__setup_pipes(t_cmd *cmd);
+void	__wait_pipeline(t_minishell *shell, t_cmd *cmd, pid_t last_pid, int *last_was_empty);
+void	__exec_single_builtin(t_minishell *shell, t_cmd *cmd);
+void	__close_fds(t_minishell *shell, t_cmd *cmd);
+
+//builtins
+int		ft_cmp_env(const void *a, const void *b);
+int		__setup_heredoc(t_minishell *shell, char *delimiter);
+int		__setup_heredocs(t_minishell *shell, char **delimiters);
+
 #endif
