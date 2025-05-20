@@ -21,7 +21,7 @@ static void	__store_heredoc_filename(char *filename)
 		g_heredoc_files[g_heredoc_count++] = ft_strdup(filename);
 }
 
-static char	*__get_heredoc_filename(void)
+char	*__get_heredoc_filename(void)
 {
 	static int	counter = 0;
 	char		filename[32];
@@ -31,13 +31,13 @@ static char	*__get_heredoc_filename(void)
 	return (ft_strdup(filename));
 }
 
-static void	__handle_heredoc_signals(void)
+void	__handle_heredoc_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-static void	__restore_signals(void)
+void	__restore_signals(void)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
