@@ -220,8 +220,6 @@ int	elsepid2(int var[3], char *strs[3], t_minishell *shell, pid_t	pid)
 {
 	waitpid(pid, &var[1], 0);
 	__restore_signals();
-	if (strs[2])
-		free(strs[2]);
 	if (WIFSIGNALED(var[1]))
 	{
 		shell->exit_status = 128 + WTERMSIG(var[1]);
