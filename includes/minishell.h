@@ -79,6 +79,69 @@ typedef struct s_parser1
 	int			*redir_error;
 }	t_parser1;
 
+typedef struct s_process_redir_args
+{
+	t_minishell	*shell;
+	t_cmd		*current;
+	t_token		**token;
+	t_cmd		*cmd_list;
+	int			*redir_error;
+}	t_process_redir_args;
+
+typedef struct s_heredoc_data
+{
+	t_minishell	*shell;
+	t_cmd		*current;
+	t_token		**token;
+	char		**heredoc_delims;
+	int			*hdoc_count;
+}	t_heredoc_data;
+
+typedef struct s_redir_data
+{
+	t_minishell	*shell;
+	t_cmd		*current;
+	t_token		**token;
+	t_cmd		*cmd_list;
+	int			*redir_error;
+}	t_redir_data;
+
+typedef struct s_hpacc_data
+{
+	t_minishell	*shell;
+	t_cmd		**cmd_list;
+	t_cmd		**current;
+	t_token		**token;
+}	t_hpacc_data;
+
+typedef struct s_process_args
+{
+	t_minishell	*shell;
+	t_cmd		*current;
+	t_token		**token;
+	t_cmd		*cmd_list;
+	int			*redir_error;
+}	t_process_args;
+
+typedef struct s_proc_red_data
+{
+	t_minishell		*shell;
+	t_cmd			*current;
+	t_token			**token;
+	t_cmd			*cmd_list;
+	int				*redir_error;
+	t_token_type	redir_type;
+}	t_proc_red_data;
+
+typedef struct s_process_redirection_args
+{
+	t_minishell	*shell;
+	t_cmd		*current;
+	t_token		**token;
+	t_cmd		*cmd_list;
+	int			*redir_error;
+}	t_process_redirection_args;
+
 char	*__make_env_var(t_minishell *shell, char *var, char *value);
 int		__replace_env_var(t_minishell *s, char *var, char *n, size_t len);
 void	init_shell(t_minishell *shell, char **env);
@@ -170,15 +233,23 @@ t_cmd	*__create_new_cmd(t_cmd *cmd_list, t_cmd **current);
 char	**__add_argument(char **args, char *value, t_cmd *cmd_list);
 int		__handle_redirection(t_minishell *shell, t_cmd *curren,
 			t_token_type redir_type, char *fl);
-int		__process_redirection(t_minishell *shell, t_cmd *current,
-			t_token **token, t_cmd *cmd_list, int *redir_error);
+int		__process_redirection(t_process_redir_args args);
 t_cmd	*parse(t_minishell *shell, t_token *token);
 int		__is_quote(char c, int in_single_quote, int in_double_quote);
 int		__process_concat_loop(char *filename, char *processed, int len);
-void	__pt(t_minishell *shell, t_cmd *current, t_token **token,
-			t_cmd *cmd_list, int *redir_error);
 t_cmd	*__hpacc(t_minishell *shell, t_cmd **cmd_list,
 			t_cmd **current, t_token **token);
+int		__handle_redir_error(t_minishell *shell, char *filename,
+			int *redir_error);
+int		__redir_syntax_error(t_minishell *shell, t_token_type redir_type,
+			t_cmd *cmd_list);
+int		__handle_pipe_or_init(t_minishell *shell, t_cmd **cmd_list,
+			t_cmd **current, t_token **token);
+void	__setup_parsing(t_cmd **cmd_list, t_cmd **current, int *redir_error);
+int		__check_first_pipe(t_minishell *shell, t_token *token);
+int		__handle_heredoc_redir(t_proc_red_data *d, t_redir_data *data);
+int		__process_other_redir(t_redir_data *data, t_token_type redir_type);
+void	__process_token(t_process_args *args);
 
 //main
 void	cleanup_parse_error(t_minishell *shell);
