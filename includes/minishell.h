@@ -36,6 +36,9 @@
 # define SINGLE_QUOTE 1
 # define DOUBLE_QUOTE 2
 
+static char		*g_heredoc_files[128];
+static int		g_heredoc_count = 0;
+
 typedef enum e_token_type
 {
 	T_WORD = 0,
