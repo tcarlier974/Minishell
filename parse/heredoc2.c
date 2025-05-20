@@ -55,7 +55,7 @@ int	__should_expand_vars(char *original_delimiter)
 	return (1);
 }
 
-static void	__write_heredoc_line(int fd, char *line,
+void	__write_heredoc_line(int fd, char *line,
 	t_minishell *shell, int expand)
 {
 	char	*expanded;
