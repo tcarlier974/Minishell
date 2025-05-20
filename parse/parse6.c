@@ -26,6 +26,20 @@ void	__process_token(t_minishell *shell, t_cmd *current, t_token **token,
 	}
 }
 
+static void	cleanup_parse_error(t_minishell *shell)
+{
+	if (shell->cmd)
+	{
+		free_cmds(shell->cmd);
+		shell->cmd = NULL;
+	}
+	if (shell->tokens)
+	{
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+	}
+}
+
 t_cmd	*parse(t_minishell *shell, t_token *token)
 {
 	t_cmd	*cmd_list;
@@ -39,7 +53,7 @@ t_cmd	*parse(t_minishell *shell, t_token *token)
 	if (token && token->type == T_PIPE)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-		return (cleanup(shell), shell->exit_status = 2, NULL);
+		return (cleanup_parse_error(shell), shell->exit_status = 2, NULL);
 	}
 	while (token)
 	{
@@ -49,7 +63,7 @@ t_cmd	*parse(t_minishell *shell, t_token *token)
 			shell->exit_status = 2;
 			if (cmd_list)
 				free_cmds(cmd_list);
-			cleanup(shell);
+			cleanup_parse_error(shell);
 			return (NULL);
 		}
 		if (!current || token->type == T_PIPE)

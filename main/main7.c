@@ -44,6 +44,20 @@ void	__handle_env_var(t_minishell *shell, char **input)
 		__handle_empty_var(shell, input, space);
 }
 
+static void	cleanup_parse_error(t_minishell *shell)
+{
+	if (shell->cmd)
+	{
+		free_cmds(shell->cmd);
+		shell->cmd = NULL;
+	}
+	if (shell->tokens)
+	{
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+	}
+}
+
 void	__process_input(t_minishell *shell, char *input)
 {
 	t_token	*tokens;
@@ -60,7 +74,7 @@ void	__process_input(t_minishell *shell, char *input)
 	shell->tokens = tokens;
 	if (!shell->cmd)
 	{
-		cleanup(shell);
+		cleanup_parse_error(shell);
 		return ;
 	}
 	current = shell->cmd;
