@@ -19,17 +19,19 @@ SRC = ./builtin/builtins1.c \
 	./main/main2.c \
 	./main/main3.c \
 	./main/main4.c \
-	./main/cleanup.c \
 	./main/main5.c \
 	./main/main6.c \
 	./main/main7.c \
-	./parse/heredoc.c \
+	./parse/heredoc1.c \
+	./parse/heredoc2.c \
+	./parse/heredoc3.c \
 	./parse/parse1.c \
 	./parse/parse2.c \
 	./parse/parse3.c \
 	./parse/parse4.c \
 	./parse/parse5.c \
 	./parse/parse6.c \
+./main/cleanup.c \
 	./parse/parse7.c \
 	./parse/parse8.c \
 	./utils/utils1.c \
