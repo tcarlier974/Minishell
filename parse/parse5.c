@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-int	__handle_redirection(t_minishell *shell, t_cmd *current, t_token_type redir_type, char *fl)
+int	__handle_redirection(t_minishell *shell, t_cmd *current,
+		t_token_type redir_type, char *fl)
 {
-	int	flags;
-	char *delimiters[2];
+	int		flags;
+	char	*delimiters[2];
 
-	(void)shell; // Mark shell as unused to avoid warning
-
+	(void)shell;
 	if (redir_type == T_REDIR_IN || redir_type == T_HEREDOC)
 	{
 		if (current->fd_in != STDIN_FILENO)
@@ -54,8 +54,7 @@ int	__handle_redirection(t_minishell *shell, t_cmd *current, t_token_type redir_
 
 static int	__redir_syntax_error(t_minishell *shell, t_token_type redir_type, t_cmd *cmd_list)
 {
-	(void)shell; // Mark shell as unused to avoid warning
-
+	(void)shell;
 	if (redir_type == T_APPEND)
 		print_error("syntax error", NULL, "near '>>'");
 	else if (redir_type == T_REDIR_OUT)
@@ -88,14 +87,10 @@ int	__process_redirection(t_minishell *shell, t_cmd *current, t_token **token, t
 	*token = (*token)->next;
 	if (!(*token) || (*token)->type != T_WORD)
 		return (__redir_syntax_error(shell, redir_type, cmd_list));
-	
 	if (redir_type == T_HEREDOC)
 	{
-		/* Store all consecutive heredoc delimiters */
 		if (hdoc_count < 127)
 			heredoc_delims[hdoc_count++] = ft_strdup((*token)->value);
-		
-		/* If next token is not another heredoc, process all collected delimiters */
 		if (!(*token)->next || (*token)->next->type != T_HEREDOC)
 		{
 			heredoc_delims[hdoc_count] = NULL;
@@ -107,8 +102,6 @@ int	__process_redirection(t_minishell *shell, t_cmd *current, t_token **token, t
 				if (current->fd_in < 0)
 					__handle_redir_error(shell, "heredoc", redir_error);
 			}
-			
-			/* Free all delimiters after processing */
 			for (int i = 0; i < hdoc_count; i++)
 			{
 				free(heredoc_delims[i]);
@@ -118,13 +111,8 @@ int	__process_redirection(t_minishell *shell, t_cmd *current, t_token **token, t
 		}
 		return (0);
 	}
-	
-	/* For non-heredoc redirections, reset heredoc count */
 	hdoc_count = 0;
-
-	/* For heredocs, we pass the original filename with quotes */
 	filename = process_concat_filename((*token)->value);
-	
 	if (!(*redir_error))
 	{
 		if (__handle_redirection(shell, current, redir_type, filename))
@@ -134,11 +122,10 @@ int	__process_redirection(t_minishell *shell, t_cmd *current, t_token **token, t
 	return (0);
 }
 
-t_cmd	*__handle_pipe_and_create_cmd(t_minishell *shell, t_cmd **cmd_list, t_cmd **current,
+t_cmd	*__hpacc(t_minishell *shell, t_cmd **cmd_list, t_cmd **current,
 			t_token **token)
 {
-	(void)shell; // Mark shell as unused to avoid warning
-
+	(void)shell;
 	*cmd_list = __create_new_cmd(*cmd_list, current);
 	if (!(*cmd_list))
 		return (NULL);

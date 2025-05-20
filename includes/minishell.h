@@ -69,6 +69,16 @@ typedef struct s_minishell
 	t_cmd		*cmd;
 	t_token		*tokens;
 }	t_minishell;
+
+typedef struct s_parser1
+{
+	t_minishell	*shell;
+	t_token		*token;
+	t_cmd		*cmd_list;
+	t_cmd		**c;
+	int			*redir_error;
+}	t_parser1;
+
 char	*__make_env_var(t_minishell *shell, char *var, char *value);
 int		__replace_env_var(t_minishell *s, char *var, char *n, size_t len);
 void	init_shell(t_minishell *shell, char **env);
@@ -80,7 +90,7 @@ int		has_balanced_quotes(char *input);
 int		length_within_quote(char quote_char, char *str, int pos);
 void	handle_quotes(char *input, int *i, int *in_quote);
 void	handle_redir_token(t_token **tokens, char *input, t_token_type type);
-
+void	cpfd(const char *s, int fd);
 t_token	*lexer(t_minishell *shell, char *input);
 t_cmd	*parse(t_minishell *shell, t_token *token);
 char	*process_filename(char *filename);
@@ -165,16 +175,16 @@ int		__process_redirection(t_minishell *shell, t_cmd *current,
 t_cmd	*parse(t_minishell *shell, t_token *token);
 int		__is_quote(char c, int in_single_quote, int in_double_quote);
 int		__process_concat_loop(char *filename, char *processed, int len);
-void	__process_token(t_minishell *shell, t_cmd *current, t_token **token,
+void	__pt(t_minishell *shell, t_cmd *current, t_token **token,
 			t_cmd *cmd_list, int *redir_error);
-t_cmd	*__handle_pipe_and_create_cmd(t_minishell *shell, t_cmd **cmd_list,
+t_cmd	*__hpacc(t_minishell *shell, t_cmd **cmd_list,
 			t_cmd **current, t_token **token);
 
 //main
 void	cleanup_parse_error(t_minishell *shell);
 void	__handle_redirection_main(t_token **tokens, char *input, int *i);
 void	__handle_quotes_main(char *input, int *i, int *in_quote);
-void	__process_token_main(t_token **t, char *input, int *i, int *in_quote);
+void	__pt_main(t_token **t, char *input, int *i, int *in_quote);
 t_token	*lexer(t_minishell *shell, char *input);
 char	*__process_quotes_main2(char *filename, int *read_pos,
 			int *in_single, int *in_double);

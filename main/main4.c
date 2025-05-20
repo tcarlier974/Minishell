@@ -54,7 +54,7 @@ void	__handle_quotes_main(char *input, int *i, int *in_quote)
 	}
 }
 
-void	__process_token_main(t_token **t, char *input, int *i, int *in_quote)
+void	__pt_main(t_token **t, char *input, int *i, int *in_quote)
 {
 	int		start;
 	char	*value;

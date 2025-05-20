@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-static char *g_heredoc_files[128];
-static int  g_heredoc_count = 0;
+static char		*g_heredoc_files[128];
+static int		g_heredoc_count = 0;
 
-static void __store_heredoc_filename(char *filename)
+static void	__store_heredoc_filename(char *filename)
 {
 	if (g_heredoc_count < 128)
 		g_heredoc_files[g_heredoc_count++] = ft_strdup(filename);
@@ -43,24 +43,27 @@ static void	__restore_signals(void)
 	signal(SIGQUIT, handle_sigquit);
 }
 
-static char *__process_delimiter(char *delimiter)
+static char	*__process_delimiter(char *delimiter)
 {
-	char *processed;
-	int len;
-	int in_single_quote = 0;
-	int in_double_quote = 0;
-	int i = 0;
-	int j = 0;
+	char	*processed;
+	int		len;
+	int		in_single_quote;
+	int		in_double_quote;
+	int		i;
+	int		j;
 
+	in_single_quote = 0;
+	in_double_quote = 0;
+	i = 0;
+	j = 0;
 	len = ft_strlen(delimiter);
 	processed = malloc(len + 1);
 	if (!processed)
 		return (NULL);
-
 	while (delimiter[i])
 	{
-		if ((delimiter[i] == '\'' && !in_double_quote) || 
-			(delimiter[i] == '"' && !in_single_quote))
+		if ((delimiter[i] == '\'' && !in_double_quote)
+			|| (delimiter[i] == '"' && !in_single_quote))
 		{
 			if (delimiter[i] == '\'' && !in_single_quote)
 				in_single_quote = 1;
@@ -79,10 +82,11 @@ static char *__process_delimiter(char *delimiter)
 	return (processed);
 }
 
-static int __should_expand_vars(char *original_delimiter)
+static int	__should_expand_vars(char *original_delimiter)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (original_delimiter[i])
 	{
 		if (original_delimiter[i] == '\'')
@@ -92,9 +96,9 @@ static int __should_expand_vars(char *original_delimiter)
 	return (1);
 }
 
-static void __write_heredoc_line(int fd, char *line, t_minishell *shell, int expand)
+static void	__write_heredoc_line(int fd, char *line, t_minishell *shell, int expand)
 {
-	char *expanded;
+	char	*expanded;
 
 	if (expand && ft_strchr(line, '$'))
 	{
@@ -114,11 +118,11 @@ int	__setup_heredoc(t_minishell *shell, char *delimiter)
 {
 	char	*line;
 	char	*heredoc_file;
-	char    *processed_delimiter;
+	char	*processed_delimiter;
 	int		fd;
 	pid_t	pid;
 	int		status;
-	int     expand_vars;
+	int		expand_vars;
 
 	heredoc_file = __get_heredoc_filename();
 	if (!heredoc_file)
@@ -194,25 +198,23 @@ int	__setup_heredocs(t_minishell *shell, char **delimiters)
 		fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 		if (fd < 0)
 			exit(1);
-		int i = 0;
+		int	i = 0;
 		while (delimiters[i])
 		{
 			char	*line;
-			char    *processed_delimiter;
-			int     expand_vars;
+			char	*processed_delimiter;
+			int		expand_vars;
 			expand_vars = __should_expand_vars(delimiters[i]);
-			
 			processed_delimiter = __process_delimiter(delimiters[i]);
 			if (!processed_delimiter)
 				exit(1);
-				
 			while (1)
 			{
 				line = readline("heredoc> ");
 				if (!line || !ft_strcmp(line, processed_delimiter))
 				{
 					free(line);
-					break;
+					break ;
 				}
 				__write_heredoc_line(fd, line, shell, expand_vars);
 				free(line);

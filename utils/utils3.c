@@ -22,8 +22,8 @@ char	*strip_surrounding_quotes(const char *str)
 	len = ft_strlen(str);
 	if (len >= 2)
 	{
-		if ((str[0] == '"' && str[len - 1] == '"') ||
-			(str[0] == '\'' && str[len - 1] == '\''))
+		if ((str[0] == '"' && str[len - 1] == '"')
+			|| (str[0] == '\'' && str[len - 1] == '\''))
 		{
 			result = ft_strndup(str + 1, len - 2);
 			return (result);

@@ -47,13 +47,19 @@ void	cleanup(t_minishell *shell)
 
 int	main(int argc, char **argv, char **env)
 {
+	t_minishell	shell;
+
 	(void)argc;
 	(void)argv;
-	t_minishell shell;
 	init_shell(&shell, env);
 	shell_loop(&shell);
 	cleanup(&shell);
 	clear_history();
 	rl_clear_history();
 	return (shell.exit_status);
+}
+
+void	cpfd(const char *s, int fd)
+{
+	ft_putstr_fd(s, fd);
 }

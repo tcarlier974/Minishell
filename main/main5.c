@@ -52,7 +52,7 @@ t_token	*lexer(t_minishell *shell, char *input)
 		else if (__is_redirection_no_quote(input[i], in_quote))
 			__handle_redirection_main(&tokens, input, &i);
 		else
-			__process_token_main(&tokens, input, &i, &in_quote);
+			__pt_main(&tokens, input, &i, &in_quote);
 	}
 	return (tokens);
 }
