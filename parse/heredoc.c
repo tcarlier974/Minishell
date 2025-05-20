@@ -138,7 +138,6 @@ void	ifpido(int var[3], char *strs[3], t_minishell *shell)
 	close(var[0]);
 	free(strs[2]);
 	free(strs[1]);
-	exit(0);
 }
 
 int	elsepid(int var[3], char *strs[3], t_minishell *shell, pid_t	pid)
@@ -179,13 +178,12 @@ int	__setup_heredoc(t_minishell *shell, char *delimiter)
 	}
 	pid = fork();
 	if (pid == -1)
-	{
-		free(strs[1]);
-		free(strs[2]);
-		return (-1);
-	}
+		return ((void)free(strs[1]), (void)free(strs[2]), -1);
 	if (pid == 0)
+	{
 		ifpido(var, strs, shell);
+		exit(0);
+	}
 	else
 		return (elsepid(var, strs, shell, pid));
 }
