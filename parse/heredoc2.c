@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-static char	*__process_delimiter(char *delimiter)
+char	*__process_delimiter(char *delimiter)
 {
 	char	*processed;
 	int		var[3];
@@ -41,7 +41,7 @@ static char	*__process_delimiter(char *delimiter)
 	return (processed);
 }
 
-static int	__should_expand_vars(char *original_delimiter)
+int	__should_expand_vars(char *original_delimiter)
 {
 	int	i;
 
