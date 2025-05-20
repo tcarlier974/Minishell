@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: samberna <samberna@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 14:55:12 by jdupuis           #+#    #+#             */
-/*   Updated: 2025/05/20 15:13:50 by samberna         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   heredoc.c										  :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: samberna <samberna@student.42.fr>		  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2023/06/15 14:55:12 by jdupuis		   #+#	#+#			 */
+/*   Updated: 2025/05/20 15:13:50 by samberna		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "minishell.h"
@@ -43,42 +43,45 @@ static void	__restore_signals(void)
 	signal(SIGQUIT, handle_sigquit);
 }
 
+void	__p_d_c(int *isq, int *idq, int *var, char *delimiter)
+{
+	if (delimiter[var[0]] == '\'' && !(*isq))
+		*isq = 1;
+	else if (delimiter[var[0]] == '\'' && *isq)
+		*isq = 0;
+	else if (delimiter[var[0]] == '"' && !(*idq))
+		*idq = 1;
+	else if (delimiter[var[0]] == '"' && *idq)
+		*idq = 0;
+	var[0]++;
+}
+
 static char	*__process_delimiter(char *delimiter)
 {
 	char	*processed;
-	int		len;
+	int		var[3];
 	int		in_single_quote;
 	int		in_double_quote;
-	int		i;
-	int		j;
 
 	in_single_quote = 0;
 	in_double_quote = 0;
-	i = 0;
-	j = 0;
-	len = ft_strlen(delimiter);
-	processed = malloc(len + 1);
+	var[0] = 0;
+	var[1] = 0;
+	var[2] = ft_strlen(delimiter);
+	processed = malloc(var[2] + 1);
 	if (!processed)
 		return (NULL);
-	while (delimiter[i])
+	while (delimiter[var[0]])
 	{
-		if ((delimiter[i] == '\'' && !in_double_quote)
-			|| (delimiter[i] == '"' && !in_single_quote))
+		if ((delimiter[var[0]] == '\'' && !in_double_quote)
+			|| (delimiter[var[0]] == '"' && !in_single_quote))
 		{
-			if (delimiter[i] == '\'' && !in_single_quote)
-				in_single_quote = 1;
-			else if (delimiter[i] == '\'' && in_single_quote)
-				in_single_quote = 0;
-			else if (delimiter[i] == '"' && !in_double_quote)
-				in_double_quote = 1;
-			else if (delimiter[i] == '"' && in_double_quote)
-				in_double_quote = 0;
-			i++;
+			__p_d_c(&in_single_quote, &in_double_quote, &var[0], delimiter);
 		}
 		else
-			processed[j++] = delimiter[i++];
+			processed[var[1]++] = delimiter[var[0]++];
 	}
-	processed[j] = '\0';
+	processed[var[1]] = '\0';
 	return (processed);
 }
 
@@ -96,7 +99,8 @@ static int	__should_expand_vars(char *original_delimiter)
 	return (1);
 }
 
-static void	__write_heredoc_line(int fd, char *line, t_minishell *shell, int expand)
+static void	__write_heredoc_line(int fd, char *line,
+	t_minishell *shell, int expand)
 {
 	char	*expanded;
 
@@ -114,131 +118,145 @@ static void	__write_heredoc_line(int fd, char *line, t_minishell *shell, int exp
 	}
 }
 
+void	ifpido(int var[3], char *strs[3], t_minishell *shell)
+{
+	__handle_heredoc_signals();
+	var[0] = open(strs[1], O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (var[0] < 0)
+		exit(1);
+	while (1)
+	{
+		strs[0] = readline("heredoc> ");
+		if (!strs[0] || !ft_strcmp(strs[0], strs[2]))
+		{
+			free(strs[0]);
+			break ;
+		}
+		__write_heredoc_line(var[0], strs[0], shell, var[2]);
+		free(strs[0]);
+	}
+	close(var[0]);
+	free(strs[2]);
+	free(strs[1]);
+	exit(0);
+}
+
+int	elsepid(int var[3], char *strs[3], t_minishell *shell, pid_t	pid)
+{
+	waitpid(pid, &var[1], 0);
+	__restore_signals();
+	free(strs[2]);
+	if (WIFSIGNALED(var[1]))
+	{
+		shell->exit_status = 128 + WTERMSIG(var[1]);
+		unlink(strs[1]);
+		free(strs[1]);
+		return (-1);
+	}
+	var[0] = open(strs[1], O_RDONLY);
+	unlink(strs[1]);
+	free(strs[1]);
+	return (var[0]);
+}
+// *strs[3]; [0] = line, [1] = heredoc_file, [2] = processed_delimiter
+// var[3]; [0] = fd, [1] = status, [2] = expand_vars
+
 int	__setup_heredoc(t_minishell *shell, char *delimiter)
 {
-	char	*line;
-	char	*heredoc_file;
-	char	*processed_delimiter;
-	int		fd;
+	char	*strs[3];
+	int		var[3];
 	pid_t	pid;
-	int		status;
-	int		expand_vars;
 
-	heredoc_file = __get_heredoc_filename();
-	if (!heredoc_file)
+	strs[1] = __get_heredoc_filename();
+	if (!strs[1])
 		return (-1);
-	expand_vars = __should_expand_vars(delimiter);
-	processed_delimiter = __process_delimiter(delimiter);
-	if (!processed_delimiter)
+	var[2] = __should_expand_vars(delimiter);
+	strs[2] = __process_delimiter(delimiter);
+	if (!strs[2])
 	{
-		free(heredoc_file);
+		free(strs[1]);
 		return (-1);
 	}
 	pid = fork();
 	if (pid == -1)
 	{
-		free(heredoc_file);
-		free(processed_delimiter);
+		free(strs[1]);
+		free(strs[2]);
 		return (-1);
 	}
 	if (pid == 0)
+		ifpido(var, strs, shell);
+	else
+		return (elsepid(var, strs, shell, pid));
+}
+
+void	ifpido2(int var[3], char *strs[3], t_minishell *shell,
+	char **delimiters)
+{
+	var[0] = open(strs[1], O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (var[0] < 0)
+		exit(1);
+	while (*delimiters)
 	{
-		__handle_heredoc_signals();
-		fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-		if (fd < 0)
+		var[2] = __should_expand_vars(*delimiters);
+		strs[2] = __process_delimiter(*delimiters);
+		if (!strs[2])
 			exit(1);
 		while (1)
 		{
-			line = readline("heredoc> ");
-			if (!line || !ft_strcmp(line, processed_delimiter))
+			strs[0] = readline("heredoc> ");
+			if (!strs[0] || !ft_strcmp(strs[0], strs[2]))
 			{
-				free(line);
+				free(strs[0]);
 				break ;
 			}
-			__write_heredoc_line(fd, line, shell, expand_vars);
-			free(line);
+			__write_heredoc_line(var[0], strs[0], shell, var[2]);
+			free(strs[0]);
 		}
-		close(fd);
-		free(processed_delimiter);
-		free(heredoc_file);
-		exit(0);
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		__restore_signals();
-		free(processed_delimiter);
-		if (WIFSIGNALED(status))
-		{
-			shell->exit_status = 128 + WTERMSIG(status);
-			unlink(heredoc_file);
-			free(heredoc_file);
-			return (-1);
-		}
-		fd = open(heredoc_file, O_RDONLY);
-		unlink(heredoc_file);
-		free(heredoc_file);
-		return (fd);
+		free(strs[2]);
+		delimiters++;
 	}
 }
 
+int	elsepid2(int var[3], char *strs[3], t_minishell *shell, pid_t	pid)
+{
+	waitpid(pid, &var[1], 0);
+	__restore_signals();
+	free(strs[2]);
+	if (WIFSIGNALED(var[1]))
+	{
+		shell->exit_status = 128 + WTERMSIG(var[1]);
+		unlink(strs[1]);
+		free(strs[1]);
+		return (-1);
+	}
+	var[0] = open(strs[1], O_RDONLY);
+	unlink(strs[1]);
+	free(strs[1]);
+	return (var[0]);
+}
+
+// *strs[3]; [0] = line, [1] = heredoc_file, [2] = processed_delimiter
+// var[3]; [0] = fd, [1] = status, [2] = expand_vars
+
 int	__setup_heredocs(t_minishell *shell, char **delimiters)
 {
-	char	*heredoc_file = __get_heredoc_filename();
-	int		fd;
+	char	*strs[3];
+	int		var[3];
 	pid_t	pid;
-	int		status;
 
-	if (!heredoc_file)
+	strs[1] = __get_heredoc_filename();
+	if (!strs[1])
 		return (-1);
 	pid = fork();
 	if (pid == 0)
 	{
 		__handle_heredoc_signals();
-		fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-		if (fd < 0)
-			exit(1);
-		int	i = 0;
-		while (delimiters[i])
-		{
-			char	*line;
-			char	*processed_delimiter;
-			int		expand_vars;
-			expand_vars = __should_expand_vars(delimiters[i]);
-			processed_delimiter = __process_delimiter(delimiters[i]);
-			if (!processed_delimiter)
-				exit(1);
-			while (1)
-			{
-				line = readline("heredoc> ");
-				if (!line || !ft_strcmp(line, processed_delimiter))
-				{
-					free(line);
-					break ;
-				}
-				__write_heredoc_line(fd, line, shell, expand_vars);
-				free(line);
-			}
-			free(processed_delimiter);
-			i++;
-		}
-		close(fd);
+		ifpido2(var, strs, shell, delimiters);
+		close(var[0]);
+		free(strs[1]);
 		exit(0);
 	}
 	else
-	{
-		waitpid(pid, &status, 0);
-		__restore_signals();
-		if (WIFSIGNALED(status))
-		{
-			shell->exit_status = 128 + WTERMSIG(status);
-			unlink(heredoc_file);
-			free(heredoc_file);
-			return (-1);
-		}
-		fd = open(heredoc_file, O_RDONLY);
-		unlink(heredoc_file);
-		free(heredoc_file);
-		return (fd);
-	}
+		return (elsepid2(var, strs, shell, pid));
 }
