@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes -L ./libft -g3
+CFLAGS = -Wall -Wextra -Werror -I./includes -g3
 LDFLAGS = -lreadline -lft
 
 SRC = ./builtin/builtins1.c \
@@ -40,7 +40,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	make libft
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
+	$(CC) $(CFLAGS) -L./libft -o $(NAME) $(OBJ) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

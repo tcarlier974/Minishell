@@ -16,7 +16,7 @@ void	__handle_empty_var(__attribute__((unused)) t_minishell *shell, char **input
 {
 	char	*remaining_cmd;
 
-	remaining_cmd = strdup(space + 1);
+	remaining_cmd = ft_strdup(space + 1);
 	if (!remaining_cmd)
 		return ;
 	while (*remaining_cmd && *remaining_cmd == ' ')
@@ -32,10 +32,10 @@ void	__handle_env_var(t_minishell *shell, char **input)
 	char	*var_name;
 	char	*var_value;
 
-	space = strchr(*input, ' ');
+	space = ft_strchr(*input, ' ');
 	if (!space)
 		return ;
-	var_name = strndup(*input + 1, space - *input - 1);
+	var_name = ft_strndup(*input + 1, space - *input - 1);
 	if (!var_name)
 		return ;
 	var_value = get_env_var(shell, var_name);
@@ -60,7 +60,7 @@ void	__process_input(t_minishell *shell, char *input)
 	shell->tokens = tokens;
 	if (!shell->cmd)
 	{
-		free_tokens(tokens);
+		cleanup(shell);
 		return ;
 	}
 	current = shell->cmd;

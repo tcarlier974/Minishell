@@ -23,11 +23,20 @@ void	init_shell(t_minishell *shell, char **env)
 void	cleanup(t_minishell *shell)
 {
 	if (shell->env)
+	{
 		free_env(shell->env);
+		shell->env = NULL;
+	}
 	if (shell->cmd)
+	{
 		free_cmds(shell->cmd);
+		shell->cmd = NULL;
+	}
 	if (shell->tokens)
+	{
 		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+	}
 }
 
 void	handle_sigint(int sig)

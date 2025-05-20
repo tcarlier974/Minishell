@@ -74,7 +74,7 @@ void	process_cmd_args(t_cmd *cmd)
 {
 	if (!cmd || !cmd->args)
 		return ;
-	if (cmd->args[0] && strcmp(cmd->args[0], "echo") == 0)
+	if (cmd->args[0] && ft_strcmp(cmd->args[0], "echo") == 0)
 	{
 		process_echo_args(cmd);
 		return ;
@@ -88,5 +88,5 @@ void	process_cmd_args(t_cmd *cmd)
 void	__free_and_replace_input(char **input, char *remaining_cmd)
 {
 	free(*input);
-	*input = strdup(remaining_cmd);
+	*input = ft_strdup(remaining_cmd);
 }

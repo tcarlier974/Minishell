@@ -31,7 +31,7 @@ char	*expand_word_with_quotes(t_minishell *shell, char *word)
 	int		in_single_quote;
 	int		in_double_quote;
 
-	result = strdup("");
+	result = ft_strdup("");
 	i = 0;
 	in_single_quote = 0;
 	in_double_quote = 0;
@@ -55,13 +55,13 @@ char	*handle_dollar_sign(t_minishell *shell, char *str, int *i)
 	if (str[*i] == '?')
 	{
 		(*i)++;
-		return (handle_exit_status(shell, strdup("")));
+		return (handle_exit_status(shell, ft_strdup("")));
 	}
-	if (!isalpha(str[*i]) && str[*i] != '_')
+	if (!ft_isalpha(str[*i]) && str[*i] != '_')
 	{
-		return (strdup("$"));
+		return (ft_strdup("$"));
 	}
-	return (handle_env_var(shell, str, i, strdup("")));
+	return (handle_env_var(shell, str, i, ft_strdup("")));
 }
 
 char	*handle_exit_status(t_minishell *shell, char *result)
@@ -69,7 +69,7 @@ char	*handle_exit_status(t_minishell *shell, char *result)
 	char	exit_status[12];
 	char	*new_result;
 
-	sprintf(exit_status, "%d", shell->exit_status);
+	ft_sprintf(exit_status, "%d", shell->exit_status);
 	new_result = join_strs(result, exit_status);
 	free(result);
 	return (new_result);

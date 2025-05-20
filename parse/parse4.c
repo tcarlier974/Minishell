@@ -17,7 +17,7 @@ char	*process_concat_filename(char *filename)
 	char	*processed;
 	int		len;
 
-	len = strlen(filename);
+	len = ft_strlen(filename);
 	processed = malloc(len + 2);
 	if (!processed)
 		return (NULL);
@@ -98,7 +98,7 @@ char	**__add_argument(char **args, char *value, t_cmd *cmd_list)
 		free_cmds(cmd_list);
 		return (NULL);
 	}
-	new_args[count] = strdup(value);
+	new_args[count] = ft_strdup(value);
 	new_args[count + 1] = NULL;
 	return (new_args);
 }

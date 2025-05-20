@@ -28,7 +28,7 @@ t_token	*__handle_unbalanced_quotes(t_minishell *shell)
 
 void	__handle_pipe(t_token **tokens, int *i)
 {
-	token_add_back(tokens, create_token(strdup("|"), T_PIPE));
+	token_add_back(tokens, create_token(ft_strdup("|"), T_PIPE));
 	(*i)++;
 }
 

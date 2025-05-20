@@ -74,7 +74,7 @@ void	__process_token_main(t_token **t, char *input, int *i, int *in_quote)
 	}
 	if (*i > start)
 	{
-		value = strndup(input + start, *i - start);
+		value = ft_strndup(input + start, *i - start);
 		token_add_back(t, create_token(value, T_WORD));
 	}
 }

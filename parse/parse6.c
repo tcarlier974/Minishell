@@ -35,8 +35,23 @@ t_cmd	*parse(t_minishell *shell, t_token *token)
 	cmd_list = NULL;
 	current = NULL;
 	redir_error = 0;
+
+	if (token && token->type == T_PIPE)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		return (cleanup(shell), shell->exit_status = 2, NULL);
+	}
 	while (token)
 	{
+		if (token->type == T_PIPE && !token->next)
+		{
+			ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+			shell->exit_status = 2;
+			if (cmd_list)
+				free_cmds(cmd_list);
+			cleanup(shell);
+			return (NULL);
+		}
 		if (!current || token->type == T_PIPE)
 		{
 			cmd_list = __handle_pipe_and_create_cmd(shell, &cmd_list, &current,

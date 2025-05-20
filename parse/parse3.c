@@ -26,7 +26,7 @@ void	__extract_var_name(char *str, int *i, char *var_name)
 	int	j;
 
 	j = 0;
-	while (isalnum(str[*i]) || str[*i] == '_')
+	while (ft_isalnum(str[*i]) || str[*i] == '_')
 	{
 		var_name[j++] = str[(*i)++];
 	}

@@ -66,7 +66,7 @@ void	process_echo_args(t_cmd *cmd)
 	int		i;
 	char	*processed;
 
-	if (!cmd || !cmd->args || strcmp(cmd->args[0], "echo") != 0)
+	if (!cmd || !cmd->args || ft_strcmp(cmd->args[0], "echo") != 0)
 		return ;
 	i = 1;
 	while (cmd->args[i])
