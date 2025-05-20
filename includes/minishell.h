@@ -145,6 +145,10 @@ typedef struct s_process_redirection_args
 	int			*redir_error;
 }	t_process_redirection_args;
 
+
+int	__should_expand_vars(char *original_delimiter);
+char	*__process_delimiter(char *delimiter);
+void	__p_d_c(int *isq, int *idq, int *var, char *delimiter);
 char	*__get_heredoc_filename(void);
 void	__handle_heredoc_signals(void);
 void	__restore_signals(void);
