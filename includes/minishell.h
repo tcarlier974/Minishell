@@ -146,10 +146,10 @@ typedef struct s_process_redirection_args
 }	t_process_redirection_args;
 
 void	__write_heredoc_line(int fd, char *line,
-	t_minishell *shell, int expand);
+		t_minishell *shell, int expand);
 int	elsepid(int var[3], char *strs[3], t_minishell *shell, pid_t	pid);
 void	ifpido(int var[3], char *strs[3], t_minishell *shell);
-int	__should_expand_vars(char *original_delimiter);
+int		__should_expand_vars(char *original_delimiter);
 char	*__process_delimiter(char *delimiter);
 void	__p_d_c(int *isq, int *idq, int *var, char *delimiter);
 char	*__get_heredoc_filename(void);

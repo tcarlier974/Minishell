@@ -12,8 +12,8 @@
 
 #include "minishell.h"
 
-char		*g_heredoc_files[128];
-int		g_heredoc_count = 0;
+char	*g_heredoc_files[128];
+int	g_heredoc_count = 0;
 
 static void	__store_heredoc_filename(char *filename)
 {
