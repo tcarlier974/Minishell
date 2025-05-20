@@ -14,10 +14,12 @@ SRC = ./builtin/builtins1.c \
 	./execute/execute2.c \
 	./execute/execute3.c \
 	./execute/execute4.c \
+	./execute/execute5.c \
 	./main/main1.c \
 	./main/main2.c \
 	./main/main3.c \
 	./main/main4.c \
+	./main/cleanup.c \
 	./main/main5.c \
 	./main/main6.c \
 	./main/main7.c \

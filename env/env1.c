@@ -67,7 +67,7 @@ void	free_env(char **env)
 
 	i = 0;
 	if (!env)
-		return;
+		return ;
 	while (env[i])
 	{
 		free(env[i]);
@@ -76,12 +76,11 @@ void	free_env(char **env)
 	free(env);
 }
 
-static char	*__make_env_var(t_minishell *shell, char *var, char *value)
+char	*__make_env_var(t_minishell *shell, char *var, char *value)
 {
 	char	*new_var;
 
-	(void)shell; // Mark shell as unused to avoid warning
-
+	(void)shell;
 	new_var = NULL;
 	if (value)
 	{
@@ -94,51 +93,21 @@ static char	*__make_env_var(t_minishell *shell, char *var, char *value)
 	return (new_var);
 }
 
-static int	__replace_env_var(t_minishell *shell, char *var, char *new_var, size_t len)
+int	__replace_env_var(t_minishell *s, char *var, char *n, size_t len)
 {
 	int	i;
 
 	i = 0;
-	while (shell->env[i])
+	while (s->env[i])
 	{
-		if (!ft_strncmp(shell->env[i], var, len)
-			&& (shell->env[i][len] == '=' || shell->env[i][len] == '\0'))
+		if (!ft_strncmp(s->env[i], var, len)
+			&& (s->env[i][len] == '=' || s->env[i][len] == '\0'))
 		{
-			free(shell->env[i]);
-			shell->env[i] = new_var;
+			free(s->env[i]);
+			s->env[i] = n;
 			return (1);
 		}
 		i++;
 	}
-	return (0);
-}
-
-int	set_env_var(t_minishell *shell, char *var, char *value)
-{
-	char	*new_var;
-	size_t	len;
-	int		count;
-	char	**new_env;
-
-	if (!is_valid_env_name(var))
-		return (1);
-	new_var = __make_env_var(shell, var, value);
-	if (!new_var)
-		return (1);
-	len = ft_strlen(var);
-	if (__replace_env_var(shell, var, new_var, len))
-		return (0);
-	count = 0;
-	while (shell->env[count])
-		count++;
-	new_env = realloc(shell->env, sizeof(char *) * (count + 2));
-	if (!new_env)
-	{
-		free(new_var);
-		return (1);
-	}
-	new_env[count] = new_var;
-	new_env[count + 1] = NULL;
-	shell->env = new_env; // assign back to shell->env
 	return (0);
 }

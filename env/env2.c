@@ -71,3 +71,32 @@ int	is_valid_env_name(char *name)
 	}
 	return (1);
 }
+
+int	set_env_var(t_minishell *shell, char *var, char *value)
+{
+	char	*new_var;
+	size_t	len;
+	int		count;
+	char	**new_env;
+
+	if (!is_valid_env_name(var))
+		return (1);
+	new_var = __make_env_var(shell, var, value);
+	if (!new_var)
+		return (1);
+	len = ft_strlen(var);
+	if (__replace_env_var(shell, var, new_var, len))
+		return (0);
+	count = 0;
+	while (shell->env[count])
+		count++;
+	new_env = realloc(shell->env, sizeof(char *) * (count + 2));
+	if (!new_env)
+	{
+		free(new_var);
+		return (1);
+	}
+	new_env[count] = new_var;
+	new_env[count + 1] = NULL;
+	return (shell->env = new_env, 0);
+}

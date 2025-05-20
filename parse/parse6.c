@@ -26,20 +26,6 @@ void	__process_token(t_minishell *shell, t_cmd *current, t_token **token,
 	}
 }
 
-static void	cleanup_parse_error(t_minishell *shell)
-{
-	if (shell->cmd)
-	{
-		free_cmds(shell->cmd);
-		shell->cmd = NULL;
-	}
-	if (shell->tokens)
-	{
-		free_tokens(shell->tokens);
-		shell->tokens = NULL;
-	}
-}
-
 t_cmd	*parse(t_minishell *shell, t_token *token)
 {
 	t_cmd	*cmd_list;

@@ -26,14 +26,14 @@ static void	__child_redir_and_exec(t_minishell *shell, t_cmd *cmd)
 	}
 	if (ft_strchr(cmd->args[0], '/'))
 		exit(execute_file(shell, cmd->args[0], cmd->args));
-	__exec_path_cmd(shell, cmd);
+	exit(__exec_path_cmd(shell, cmd));
 }
 
 static pid_t	__launch_empty_or_error(t_cmd *cmd, int status)
 {
 	pid_t	pid;
 
-	(void)cmd;	
+	(void)cmd;
 	pid = fork();
 	if (pid == 0)
 		exit(status);
@@ -87,7 +87,7 @@ void	__setup_pipes(t_cmd *cmd)
 	}
 }
 
-void	__wait_pipeline(t_minishell *shell, t_cmd *cmd, pid_t last_pid, int *last_was_empty)
+void	__wait_pipeline(t_minishell *shell, t_cmd *cmd, pid_t last_pid, int *la)
 {
 	t_cmd	*tmp;
 	int		status;
@@ -112,6 +112,6 @@ void	__wait_pipeline(t_minishell *shell, t_cmd *cmd, pid_t last_pid, int *last_w
 		}
 		tmp = tmp->next;
 	}
-	if (*last_was_empty)
+	if (*la)
 		shell->exit_status = 0;
 }

@@ -16,7 +16,7 @@ void	__close_fds(t_minishell *shell, t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
-	(void)shell; // shell is not used, but keep signature for consistency
+	(void)shell;
 	tmp = cmd;
 	while (tmp)
 	{

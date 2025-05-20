@@ -58,7 +58,21 @@ void	__close_other_fds(t_cmd *cmd)
 	}
 }
 
-void	__exec_path_cmd(t_minishell *shell, t_cmd *cmd)
+static int	irf(t_minishell *shell, t_cmd *cmd, struct stat *st)
+{
+	if (access(cmd->args[0], F_OK) == 0)
+	{
+		if (stat(cmd->args[0], st) == 0 && S_ISDIR((*st).st_mode))
+			return (print_error(cmd->args[0], NULL, "Is a directory"), 126);
+		if (access(cmd->args[0], X_OK) != 0)
+			return (print_error(cmd->args[0], NULL, strerror(errno)), 126);
+		execve(cmd->args[0], cmd->args, shell->env);
+		return (print_error(cmd->args[0], NULL, strerror(errno)), 127);
+	}
+	return (print_error(cmd->args[0], NULL, "No such file or directory"), 127);
+}
+
+int	__exec_path_cmd(t_minishell *shell, t_cmd *c)
 {
 	char		*path_env;
 	char		*dir;
@@ -66,67 +80,22 @@ void	__exec_path_cmd(t_minishell *shell, t_cmd *cmd)
 	char		fullpath[MAX_PATH];
 	struct stat	st;
 
-	// Check if it's a relative path like ./something
-	if (cmd->args[0][0] == '.' && cmd->args[0][1] == '/')
-	{
-		if (access(cmd->args[0], F_OK) == 0)
-		{
-			if (stat(cmd->args[0], &st) == 0 && S_ISDIR(st.st_mode))
-			{
-				print_error(cmd->args[0], NULL, "Is a directory");
-				exit(126);
-			}
-			if (access(cmd->args[0], X_OK) != 0)
-			{
-				print_error(cmd->args[0], NULL, strerror(errno));
-				exit(126);
-			}
-			execve(cmd->args[0], cmd->args, shell->env);
-			print_error(cmd->args[0], NULL, strerror(errno));
-			exit(127);
-		}
-		print_error(cmd->args[0], NULL, "No such file or directory");
-		exit(127);
-	}
-
-	// Original code for PATH search
+	if (c->args[0][0] == '.' && c->args[0][1] == '/')
+		return (irf(shell, c, &st));
 	path_env = get_env_var(shell, "PATH");
 	if (!path_env || !path_env[0])
-	{
-		print_error(cmd->args[0], NULL, "No such file or directory");
-		exit(127);
-	}
-	
-	// PATH search logic
+		return (print_error(c->args[0], 0, "No such file or directory"), 127);
 	path_env = ft_strdup(path_env);
 	saveptr = NULL;
 	dir = strtok_r(path_env, ":", &saveptr);
 	while (dir)
 	{
-		snprintf(fullpath, sizeof(fullpath), "%s/%s", dir, cmd->args[0]);
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", dir, c->args[0]);
 		if (access(fullpath, X_OK) == 0)
-			execve(fullpath, cmd->args, shell->env);
+			execve(fullpath, c->args, shell->env);
 		dir = strtok_r(NULL, ":", &saveptr);
 	}
 	free(path_env);
-	print_error(cmd->args[0], NULL, "command not found");
-	free_cmds(shell->cmd);
-	free_tokens(shell->tokens); // Free command list before exit
-	free_env(shell->env); // Free environment variables
-	exit(127);
-}
-
-void	__redir_fd(int fd, int std)
-{
-	if (fd != std)
-	{
-		if (fd < 0)
-		{
-			if (std == STDIN_FILENO)
-				close(STDIN_FILENO);
-			exit(1);
-		}
-		dup2(fd, std);
-		close(fd);
-	}
+	print_error(c->args[0], NULL, "command not found");
+	return (cleanup(shell), 127);
 }

@@ -12,10 +12,11 @@
 
 #include "minishell.h"
 
-void	__handle_empty_var(__attribute__((unused)) t_minishell *shell, char **input, char *space)
+void	__handle_empty_var(t_minishell *shell, char **input, char *space)
 {
 	char	*remaining_cmd;
 
+	(void)shell;
 	remaining_cmd = ft_strdup(space + 1);
 	if (!remaining_cmd)
 		return ;
@@ -44,17 +45,13 @@ void	__handle_env_var(t_minishell *shell, char **input)
 		__handle_empty_var(shell, input, space);
 }
 
-static void	cleanup_parse_error(t_minishell *shell)
+static void	pouleto(t_cmd	*current)
 {
-	if (shell->cmd)
+	while (current)
 	{
-		free_cmds(shell->cmd);
-		shell->cmd = NULL;
-	}
-	if (shell->tokens)
-	{
-		free_tokens(shell->tokens);
-		shell->tokens = NULL;
+		if (current->args && current->args[0])
+			process_cmd_args(current);
+		current = current->next;
 	}
 }
 
@@ -73,17 +70,9 @@ void	__process_input(t_minishell *shell, char *input)
 	shell->cmd = parse(shell, tokens);
 	shell->tokens = tokens;
 	if (!shell->cmd)
-	{
-		cleanup_parse_error(shell);
-		return ;
-	}
+		return (cleanup_parse_error(shell));
 	current = shell->cmd;
-	while (current)
-	{
-		if (current->args && current->args[0])
-			process_cmd_args(current);
-		current = current->next;
-	}
+	pouleto(current);
 	execute(shell, shell->cmd);
 	free_cmds(shell->cmd);
 	shell->cmd = NULL;
@@ -110,17 +99,4 @@ void	shell_loop(t_minishell *shell)
 			__process_input(shell, input);
 		free(input);
 	}
-}
-
-int	main(int argc, char **argv, char **env)
-{
-	(void)argc;
-	(void)argv;
-	t_minishell shell;
-	init_shell(&shell, env);
-	shell_loop(&shell);
-	cleanup(&shell);
-	clear_history();
-	rl_clear_history();
-	return (shell.exit_status);
 }
