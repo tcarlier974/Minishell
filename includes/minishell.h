@@ -145,6 +145,9 @@ typedef struct s_process_redirection_args
 	int			*redir_error;
 }	t_process_redirection_args;
 
+char	*__get_heredoc_filename(void);
+void	__handle_heredoc_signals(void);
+void	__restore_signals(void);
 char	*__make_env_var(t_minishell *shell, char *var, char *value);
 int		__replace_env_var(t_minishell *s, char *var, char *n, size_t len);
 void	init_shell(t_minishell *shell, char **env);
