@@ -63,3 +63,8 @@ void	cpfd(const char *s, int fd)
 {
 	ft_putstr_fd(s, fd);
 }
+
+int	is_whitespace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n');
+}

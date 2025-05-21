@@ -15,6 +15,10 @@ SRC = ./builtin/builtins1.c \
 	./execute/execute3.c \
 	./execute/execute4.c \
 	./execute/execute5.c \
+	./heredoc/heredoc1.c \
+	./heredoc/heredoc2.c \
+	./heredoc/heredoc3.c \
+	./main/cleanup.c \
 	./main/main1.c \
 	./main/main2.c \
 	./main/main3.c \
@@ -22,23 +26,20 @@ SRC = ./builtin/builtins1.c \
 	./main/main5.c \
 	./main/main6.c \
 	./main/main7.c \
-	./parse/heredoc1.c \
-	./parse/heredoc2.c \
-	./parse/heredoc3.c \
 	./parse/parse1.c \
 	./parse/parse2.c \
 	./parse/parse3.c \
 	./parse/parse4.c \
 	./parse/parse5.c \
 	./parse/parse6.c \
-./main/cleanup.c \
 	./parse/parse7.c \
 	./parse/parse8.c \
 	./utils/utils1.c \
 	./utils/utils2.c \
 	./utils/utils3.c \
 	./utils/utils4.c \
-	./utils/utils5.c
+	./utils/utils5.c \
+	./utils/utils6.c
 
 OBJ = $(SRC:.c=.o)
 

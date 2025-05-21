@@ -92,7 +92,7 @@ char	**__add_argument(char **args, char *value, t_cmd *cmd_list)
 	if (args)
 		while (args[count])
 			count++;
-	new_args = realloc(args, sizeof(char *) * (count + 2));
+	new_args = ft_realloc(args, sizeof(char *) * (count + 2));
 	if (!new_args)
 	{
 		free_cmds(cmd_list);

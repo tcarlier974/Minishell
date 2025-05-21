@@ -145,6 +145,12 @@ typedef struct s_process_redirection_args
 	int			*redir_error;
 }	t_process_redirection_args;
 
+typedef struct s_format
+{
+	char	*ptr;
+	int		i;
+}	t_format;
+
 void	__write_heredoc_line(int fd, char *line,
 			t_minishell *shell, int expand);
 int		elsepid(int var[3], char *strs[3], t_minishell *shell, pid_t	pid);
@@ -179,6 +185,7 @@ char	*expand_word_with_quotes(t_minishell *shell, char *word);
 char	*handle_dollar_sign(t_minishell *shell, char *str, int *i);
 char	*handle_exit_status(t_minishell *shell, char *result);
 char	*handle_env_var(t_minishell *shell, char *str, int *i, char *result);
+void	*ft_realloc(void *ptr, size_t newsize);
 
 void	process_cmd_args(t_cmd *cmd);
 void	process_echo_args(t_cmd *cmd);
@@ -263,6 +270,7 @@ int		__check_first_pipe(t_minishell *shell, t_token *token);
 int		__handle_heredoc_redir(t_proc_red_data *d, t_redir_data *data);
 int		__process_other_redir(t_redir_data *data, t_token_type redir_type);
 void	__process_token(t_process_args *args);
+char	*__sub_handle_string(char *ptr, va_list ap);
 
 //main
 void	cleanup_parse_error(t_minishell *shell);

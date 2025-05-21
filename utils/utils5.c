@@ -56,18 +56,15 @@ char	*ft_strncpy(char *dst, const char *src, size_t n)
 	return (dst);
 }
 
-int	ft_sprintf(char *str, const char *fmt, ...)
+char	*__sub_handle_string(char *ptr, va_list ap)
 {
-	va_list	ap;
-	int		ret;
+	char	*s;
 
-	va_start(ap, fmt);
-	ret = vsprintf(str, fmt, ap);
-	va_end(ap);
-	return (ret);
-}
-
-int	is_whitespace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n');
+	s = va_arg(ap, char *);
+	if (!s)
+		s = "(null)";
+	ft_strcpy(ptr, s);
+	while (*ptr)
+		ptr++;
+	return (ptr);
 }

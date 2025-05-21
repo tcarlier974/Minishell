@@ -90,7 +90,7 @@ int	set_env_var(t_minishell *shell, char *var, char *value)
 	count = 0;
 	while (shell->env[count])
 		count++;
-	new_env = realloc(shell->env, sizeof(char *) * (count + 2));
+	new_env = ft_realloc(shell->env, sizeof(char *) * (count + 2));
 	if (!new_env)
 	{
 		free(new_var);
