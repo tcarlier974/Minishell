@@ -1,0 +1,17 @@
+echo >
+echo bonjour >>> test
+echo bonjour > > out
+echo 2 >> out1 > out2
+echo 2 > out1 >> out2
+coyotte > < " "
+sleep 5 | exit
+echo coucou |
+echo "\n \n \n"
+pwd a
+pwd a b c d
+cat < >
+cat < <
+cat > >
+a ls > b < Makefile
+exit 0 | exit 1
+exit 1 | exit 0
