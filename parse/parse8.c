@@ -6,7 +6,7 @@
 /*   By: jdupuis <jdupuis@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 20:29:17 by jdupuis           #+#    #+#             */
-/*   Updated: 2025/05/21 02:47:58 by jdupuis          ###   ########.fr       */
+/*   Updated: 2025/05/23 22:19:04 by jdupuis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,31 +62,26 @@ t_cmd	*__hpacc(t_minishell *shell, t_cmd **cmd_list, t_cmd **current,
 	return (*cmd_list);
 }
 
-t_cmd	*parse(t_minishell *shell, t_token *token)
+int	__parse_token(t_parse_data *data)
 {
-	t_cmd			*cmd_list;
-	t_cmd			*current;
-	int				redir_error;
-	t_process_args	args;
 	int				result;
+	t_process_args	args;
 
-	__setup_parsing(&cmd_list, &current, &redir_error);
-	if (__check_first_pipe(shell, token))
-		return (NULL);
-	while (token)
+	result = __handle_pipe_or_init(data->shell, data->cmd_list,
+			data->current, data->token);
+	if (result == 1)
+		return (0);
+	if (result == 2)
 	{
-		result = __handle_pipe_or_init(shell, &cmd_list, &current, &token);
-		if (result == 1)
-			return (NULL);
-		if (result == 2)
-		{
-			redir_error = 0;
-			if (!current)
-				continue ;
-		}
-		args = (t_process_args){shell, current, &token, cmd_list, &redir_error};
-		__process_token(&args);
-		token = token->next;
+		*(data->redir_error) = 0;
+		if (!(*(data->current)))
+			return (2);
 	}
-	return (cmd_list);
+	args.shell = data->shell;
+	args.current = *(data->current);
+	args.token = data->token;
+	args.cmd_list = *(data->cmd_list);
+	args.redir_error = data->redir_error;
+	__process_token(&args);
+	return (1);
 }

@@ -32,45 +32,29 @@ void	__handle_pipe(t_token **tokens, int *i)
 	(*i)++;
 }
 
-t_token	*lexer(t_minishell *shell, char *input)
+static int	__check_triple_redirection(char *input, int i, t_minishell *shell,
+	t_token **tokens)
 {
-	t_token	*tokens;
-	int		i;
-	int		in_quote;
-
-	if (!has_balanced_quotes(input))
-		return (__handle_unbalanced_quotes(shell));
-	tokens = NULL;
-	i = 0;
-	in_quote = NO_QUOTE;
-	while (input[i])
+	if (input[i] == '>' && input[i + 1] == '>' && input[i + 2] == '>')
 	{
-		if (__is_whitespace_no_quote(input[i], in_quote))
-			i++;
-		else if (__is_pipe_no_quote(input[i], in_quote))
-			__handle_pipe(&tokens, &i);
-		else if (__is_redirection_no_quote(input[i], in_quote))
-			__handle_redirection_main(&tokens, input, &i);
-		else
-			__pt_main(&tokens, input, &i, &in_quote);
+		print_error("syntax error", NULL, "near '>'");
+		shell->exit_status = 2;
+		free_tokens(*tokens);
+		return (0);
 	}
-	return (tokens);
+	return (1);
 }
 
-void	__handle_quote_state(char c, int *in_single, int *in_double)
+int	__lexer_handle_redirection(t_token **tokens, char *input, int *i,
+	t_minishell *shell)
 {
-	if (c == '\'' && !(*in_double))
+	if (!__check_triple_redirection(input, *i, shell, tokens))
+		return (0);
+	__handle_redirection_main(tokens, input, i);
+	if (!*tokens)
 	{
-		if (*in_single)
-			*in_single = 0;
-		else
-			*in_single = 1;
+		shell->exit_status = 2;
+		return (0);
 	}
-	else if (c == '"' && !(*in_single))
-	{
-		if (*in_double)
-			*in_double = 0;
-		else
-			*in_double = 1;
-	}
+	return (1);
 }

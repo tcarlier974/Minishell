@@ -31,7 +31,9 @@ void	print_error(char *cmd, char *arg, char *error)
 		write(2, ": ", 2);
 	}
 	if (error)
+	{
 		write(2, error, ft_strlen(error));
+	}
 	write(2, "\n", 1);
 }
 

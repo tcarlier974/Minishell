@@ -39,10 +39,7 @@ void	cleanup(t_minishell *shell)
 		shell->cmd = NULL;
 	}
 	if (shell->tokens)
-	{
 		free_tokens(shell->tokens);
-		shell->tokens = NULL;
-	}
 }
 
 int	main(int argc, char **argv, char **env)

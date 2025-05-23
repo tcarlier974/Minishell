@@ -151,6 +151,15 @@ typedef struct s_format
 	int		i;
 }	t_format;
 
+typedef struct s_parse_data
+{
+	t_minishell	*shell;
+	t_cmd		**cmd_list;
+	t_cmd		**current;
+	t_token		**token;
+	int			*redir_error;
+}	t_parse_data;
+
 void	__write_heredoc_line(int fd, char *line,
 			t_minishell *shell, int expand);
 int		elsepid(int var[3], char *strs[3], t_minishell *shell, pid_t	pid);
@@ -271,6 +280,16 @@ int		__handle_heredoc_redir(t_proc_red_data *d, t_redir_data *data);
 int		__process_other_redir(t_redir_data *data, t_token_type redir_type);
 void	__process_token(t_process_args *args);
 char	*__sub_handle_string(char *ptr, va_list ap);
+int		__parse_token(t_parse_data *data);
+void	__handle_pipe(t_token **tokens, int *i);
+int		__is_redirection_no_quote(char c, int in_quote);
+void	__handle_heredoc(t_token **tokens, char *input, int *i);
+void	__handle_single_out(t_token **tokens, char *input, int *i);
+void	__handle_double_out(t_token **tokens, char *input, int *i);
+void	__handle_triple_out(t_token **tokens, char *input, int *i);
+int		__check_next_token(char *input, int i);
+void	__handle_single_in(t_token **tokens, char *input, int *i);
+int		__handle_heredoc2(t_heredoc_data *data);
 
 //main
 void	cleanup_parse_error(t_minishell *shell);
@@ -285,6 +304,10 @@ int		__is_whitespace_no_quote(char c, int in_quote);
 int		__is_pipe_no_quote(char c, int in_quote);
 void	__handle_quote_state(char c, int *in_single, int *in_double);
 void	__free_and_replace_input(char **input, char *remaining_cmd);
+int		__is_pipe_no_quote(char c, int in_quote);
+int		__lexer_handle_redirection(t_token **tokens, char *input, int *i,
+			t_minishell *shell);
+t_token	*__handle_unbalanced_quotes(t_minishell *shell);
 
 //exectution
 void	__redir_fd(int fd, int std);

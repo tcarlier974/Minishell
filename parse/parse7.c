@@ -6,7 +6,7 @@
 /*   By: jdupuis <jdupuis@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 20:28:52 by jdupuis           #+#    #+#             */
-/*   Updated: 2025/05/21 02:47:57 by jdupuis          ###   ########.fr       */
+/*   Updated: 2025/05/23 20:45:38 by jdupuis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	__clean_heredoc_delims(char **heredoc_delims, int *hdoc_count)
 	*hdoc_count = 0;
 }
 
-static int	__handle_heredoc(t_heredoc_data *data)
+int	__handle_heredoc2(t_heredoc_data *data)
 {
 	if (*(data->hdoc_count) < 127)
 	{
@@ -57,7 +57,7 @@ static int	__process_heredoc(t_redir_data *d, char **h_delims, int *h_count)
 	hd_data.token = d->token;
 	hd_data.heredoc_delims = h_delims;
 	hd_data.hdoc_count = h_count;
-	if (!(*d->redir_error) && __handle_heredoc(&hd_data))
+	if (!(*d->redir_error) && __handle_heredoc2(&hd_data))
 		return (__handle_redir_error(d->shell, "heredoc", d->redir_error));
 	return (0);
 }

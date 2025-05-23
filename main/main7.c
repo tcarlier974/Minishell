@@ -64,8 +64,8 @@ void	__process_input(t_minishell *shell, char *input)
 	if (input[0] == '$')
 		__handle_env_var(shell, &input);
 	tokens = lexer(shell, input);
-	if (!tokens)
-		return ;
+	if (!tokens || tokens == NULL)
+		return (cleanup_parse_error(shell));
 	expand_variables(shell, tokens);
 	shell->cmd = parse(shell, tokens);
 	shell->tokens = tokens;
@@ -74,11 +74,13 @@ void	__process_input(t_minishell *shell, char *input)
 	current = shell->cmd;
 	pouleto(current);
 	execute(shell, shell->cmd);
-	free_cmds(shell->cmd);
-	shell->cmd = NULL;
+	if (shell->cmd)
+	{
+		free_cmds(shell->cmd);
+		shell->cmd = NULL;
+	}
 	if (shell->tokens)
 		free_tokens(shell->tokens);
-	shell->tokens = NULL;
 }
 
 void	shell_loop(t_minishell *shell)

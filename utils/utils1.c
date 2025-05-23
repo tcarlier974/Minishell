@@ -38,6 +38,7 @@ void	free_tokens(t_token *tokens)
 		free(tokens);
 		tokens = next;
 	}
+	tokens = NULL;
 }
 
 void	free_cmds(t_cmd *cmd)

@@ -26,6 +26,8 @@ SRC = ./builtin/builtins1.c \
 	./main/main5.c \
 	./main/main6.c \
 	./main/main7.c \
+	./main/main8.c \
+	./main/main9.c \
 	./parse/parse1.c \
 	./parse/parse2.c \
 	./parse/parse3.c \
@@ -34,6 +36,7 @@ SRC = ./builtin/builtins1.c \
 	./parse/parse6.c \
 	./parse/parse7.c \
 	./parse/parse8.c \
+	./parse/parse9.c \
 	./utils/utils1.c \
 	./utils/utils2.c \
 	./utils/utils3.c \

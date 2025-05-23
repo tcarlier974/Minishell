@@ -65,7 +65,7 @@ int	__handle_redirection(t_minishell *shell, t_cmd *current,
 int	__redir_syntax_error(t_minishell *shell, t_token_type redir_type,
 		t_cmd *cmd_list)
 {
-	(void)shell;
+	(void)cmd_list;
 	if (redir_type == T_APPEND)
 		print_error("syntax error", NULL, "near '>>'");
 	else if (redir_type == T_REDIR_OUT)
@@ -74,7 +74,7 @@ int	__redir_syntax_error(t_minishell *shell, t_token_type redir_type,
 		print_error("syntax error", NULL, "near '<<'");
 	else
 		print_error("syntax error", NULL, "near '<'");
-	free_cmds(cmd_list);
+	shell->exit_status = 2;
 	return (1);
 }
 
